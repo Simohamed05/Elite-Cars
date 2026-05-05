@@ -3,203 +3,226 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Elite Cars — 5 Thèmes de Sites Web</title>
+  <title>Elite Cars — 8 Thèmes de Sites Web</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #0F172A; color: white; min-height: 100vh; }
-    header { text-align: center; padding: 60px 20px 40px; }
-    .header-tag { display: inline-block; background: rgba(255,255,255,.08); color: #94A3B8; padding: 6px 16px; border-radius: 100px; font-size: .75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; border: 1px solid rgba(255,255,255,.1); }
-    header h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; margin-bottom: 12px; }
-    header p { color: #64748B; font-size: 1rem; max-width: 520px; margin: 0 auto; line-height: 1.7; }
-    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; padding: 0 40px 60px; max-width: 1280px; margin: 0 auto; }
-    .card { background: #1E293B; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,.07); transition: transform .3s, border-color .3s; }
-    .card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,.15); }
-    .card-preview { height: 200px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800; letter-spacing: 4px; }
-    .card-preview.elegance { background: linear-gradient(135deg, #080808, #1a1a1a); color: #C9A84C; }
-    .card-preview.moderne { background: linear-gradient(135deg, #1E3A8A, #3B82F6); color: white; }
-    .card-preview.dynamique { background: linear-gradient(135deg, #111827, #374151); color: #DC2626; }
-    .card-preview.oasis { background: linear-gradient(135deg, #0D2B29, #0D9488); color: #2DD4BF; }
-    .card-preview.galaxy { background: linear-gradient(135deg, #08051A, #5B21B6); color: #A78BFA; }
-    .card-body { padding: 24px; }
-    .card-tag { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
-    .card-tag.gold { color: #C9A84C; }
-    .card-tag.blue { color: #3B82F6; }
-    .card-tag.red { color: #DC2626; }
-    .card-tag.teal { color: #14B8A6; }
-    .card-tag.purple { color: #A78BFA; }
-    .card-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
-    .card-desc { font-size: .85rem; color: #64748B; line-height: 1.6; margin-bottom: 20px; }
-    .card-colors { display: flex; gap: 8px; margin-bottom: 20px; }
-    .color-dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,.2); }
-    .card-price { font-size: .8rem; color: #475569; margin-bottom: 20px; }
-    .card-price strong { color: white; font-size: .95rem; }
-    .card-link { display: block; text-align: center; padding: 13px; border-radius: 8px; font-weight: 700; font-size: .85rem; text-decoration: none; transition: all .3s; }
-    .card-link.gold-link { background: #C9A84C; color: #080808; }
-    .card-link.gold-link:hover { background: #F0D080; }
-    .card-link.blue-link { background: #2563EB; color: white; }
-    .card-link.blue-link:hover { background: #1E40AF; }
-    .card-link.red-link { background: #DC2626; color: white; }
-    .card-link.red-link:hover { background: #B91C1C; }
-    .card-link.teal-link { background: #0D9488; color: white; }
-    .card-link.teal-link:hover { background: #0F766E; }
-    .card-link.purple-link { background: linear-gradient(135deg, #7C3AED, #5B21B6); color: white; }
-    .card-link.purple-link:hover { background: linear-gradient(135deg, #6D28D9, #4C1D95); }
-    footer { text-align: center; padding: 32px; border-top: 1px solid rgba(255,255,255,.07); color: #334155; font-size: .8rem; }
+    body { font-family: 'Inter', sans-serif; background: #0A0F1E; color: white; min-height: 100vh; }
+
+    header { text-align: center; padding: 56px 20px 36px; }
+    .header-tag { display: inline-block; background: rgba(255,255,255,.06); color: #64748B; padding: 5px 14px; border-radius: 100px; font-size: .7rem; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 16px; border: 1px solid rgba(255,255,255,.08); }
+    header h1 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 800; margin-bottom: 10px; letter-spacing: -.5px; }
+    header p { color: #475569; font-size: .9rem; max-width: 460px; margin: 0 auto; line-height: 1.7; }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      padding: 0 32px 56px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .card { background: #131929; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.06); transition: transform .3s, border-color .3s, box-shadow .3s; }
+    .card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,.14); box-shadow: 0 16px 48px rgba(0,0,0,.4); }
+
+    .card-preview { height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 1.6rem; font-weight: 800; letter-spacing: 4px; position: relative; overflow: hidden; }
+    .card-preview .badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,.35); backdrop-filter: blur(8px); color: rgba(255,255,255,.8); font-size: .55rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 9px; border-radius: 100px; }
+
+    .elegance  { background: linear-gradient(135deg, #080808, #1a1a1a); color: #C9A84C; }
+    .marrakech { background: linear-gradient(135deg, #1C0A00, #C2410C); color: #FDE68A; }
+    .magazine  { background: #0A0A0A; color: #E11D48; }
+    .minimal   { background: linear-gradient(135deg, #F3F3F3, #E8E8E8); color: #111; }
+    .moderne   { background: linear-gradient(135deg, #1E3A8A, #3B82F6); color: white; }
+    .galaxy    { background: linear-gradient(135deg, #08051A, #5B21B6); color: #A78BFA; }
+    .oasis     { background: linear-gradient(135deg, #0D2B29, #0D9488); color: #2DD4BF; }
+    .dynamique { background: linear-gradient(135deg, #111827, #374151); color: #DC2626; }
+
+    .card-body { padding: 18px 18px 20px; }
+    .card-num  { font-size: .6rem; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; }
+    .card-title { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .card-desc { font-size: .78rem; color: #475569; line-height: 1.55; margin-bottom: 14px; }
+    .card-colors { display: flex; gap: 6px; margin-bottom: 14px; }
+    .color-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(255,255,255,.15); }
+    .card-price { font-size: .74rem; color: #334155; margin-bottom: 14px; }
+    .card-price strong { color: #94A3B8; font-size: .88rem; }
+    .card-link { display: block; text-align: center; padding: 11px; border-radius: 8px; font-weight: 700; font-size: .78rem; text-decoration: none; transition: all .3s; letter-spacing: .3px; }
+
+    .gold-link   { background: #C9A84C; color: #080808; }
+    .gold-link:hover { background: #F0D080; }
+    .terra-link  { background: #C2410C; color: white; }
+    .terra-link:hover { background: #9A3412; }
+    .mag-link    { background: #E11D48; color: white; }
+    .mag-link:hover { background: #BE123C; }
+    .min-link    { background: #111; color: white; }
+    .min-link:hover { background: #333; }
+    .blue-link   { background: #2563EB; color: white; }
+    .blue-link:hover { background: #1E40AF; }
+    .purple-link { background: linear-gradient(135deg, #7C3AED, #5B21B6); color: white; }
+    .purple-link:hover { opacity: .85; }
+    .teal-link   { background: #0D9488; color: white; }
+    .teal-link:hover { background: #0F766E; }
+    .red-link    { background: #DC2626; color: white; }
+    .red-link:hover { background: #B91C1C; }
+
+    footer { text-align: center; padding: 28px; border-top: 1px solid rgba(255,255,255,.05); color: #1E293B; font-size: .76rem; }
+
+    @media (max-width: 1100px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 780px)  { .cards { grid-template-columns: repeat(2, 1fr); padding: 0 16px 40px; gap: 14px; } }
+    @media (max-width: 480px)  { .cards { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
+
   <header>
     <div class="header-tag">Elite Cars Marrakech</div>
     <h1>8 Thèmes de Sites Web</h1>
-    <p>Cliquez sur un thème pour prévisualiser le site complet. Chaque thème est 100% fonctionnel et prêt à personnaliser pour votre agence.</p>
+    <p>Cliquez sur un thème pour prévisualiser le site complet. Chaque thème est 100% fonctionnel et personnalisable.</p>
   </header>
 
   <div class="cards">
 
-    <!-- THEME 1 -->
+    <!-- 1. ÉLÉGANCE -->
     <div class="card">
-      <div class="card-preview elegance">ÉLÉGANCE</div>
+      <div class="card-preview elegance">ÉLÉGANCE<div class="badge">⭐ Premium</div></div>
       <div class="card-body">
-        <div class="card-tag gold">Thème 1 · Premium</div>
-        <div class="card-title">Élégance — Noir & Or</div>
-        <p class="card-desc">Style luxueux et raffiné pour les agences premium. Animation cinématique, curseur personnalisé, design sobre et doré.</p>
+        <div class="card-num">Thème 01 · Noir & Or</div>
+        <div class="card-title">Élégance</div>
+        <p class="card-desc">Style luxueux et raffiné. Curseur personnalisé, animations cinématiques, design sobre et doré.</p>
         <div class="card-colors">
-          <div class="color-dot" style="background:#080808" title="Noir profond"></div>
-          <div class="color-dot" style="background:#C9A84C" title="Or métallique"></div>
-          <div class="color-dot" style="background:#F0D080" title="Or clair"></div>
-          <div class="color-dot" style="background:#1A1A1A" title="Sombre"></div>
+          <div class="color-dot" style="background:#080808"></div>
+          <div class="color-dot" style="background:#C9A84C"></div>
+          <div class="color-dot" style="background:#F0D080"></div>
+          <div class="color-dot" style="background:#1A1A1A"></div>
         </div>
-        <p class="card-price">Tarif recommandé : <strong>2 000 – 3 000 MAD</strong></p>
-        <a href="theme1-elegance/index.html" class="card-link gold-link">Voir le thème Élégance →</a>
+        <p class="card-price">Tarif : <strong>1 500 – 2 000 MAD</strong></p>
+        <a href="theme1-elegance/index.html" class="card-link gold-link">Voir Élégance →</a>
       </div>
     </div>
 
-    <!-- THEME 2 -->
+    <!-- 2. MARRAKECH -->
     <div class="card">
-      <div class="card-preview moderne">MODERNE</div>
+      <div class="card-preview marrakech">MARRAKECH<div class="badge">🕌 Marocain</div></div>
       <div class="card-body">
-        <div class="card-tag blue">Thème 2 · Professionnel</div>
-        <div class="card-title">Moderne — Bleu & Blanc</div>
-        <p class="card-desc">Design propre et intuitif pour agences classiques. Interface claire avec galerie véhicules et formulaire de réservation.</p>
-        <div class="card-colors">
-          <div class="color-dot" style="background:#1E3A8A" title="Bleu foncé"></div>
-          <div class="color-dot" style="background:#2563EB" title="Bleu moyen"></div>
-          <div class="color-dot" style="background:#3B82F6" title="Bleu clair"></div>
-          <div class="color-dot" style="background:#FFFFFF;border-color:#334155" title="Blanc"></div>
-        </div>
-        <p class="card-price">Tarif recommandé : <strong>1 200 – 2 000 MAD</strong></p>
-        <a href="theme2-moderne/index.html" class="card-link blue-link">Voir le thème Moderne →</a>
-      </div>
-    </div>
-
-    <!-- THEME 3 -->
-    <div class="card">
-      <div class="card-preview dynamique">DYNAMIQUE</div>
-      <div class="card-body">
-        <div class="card-tag red">Thème 3 · Populaire</div>
-        <div class="card-title">Dynamique — Rouge & Gris</div>
-        <p class="card-desc">Style énergique et commercial pour agences accessibles. Fort impact visuel, animations agressives, galerie véhicules complète.</p>
-        <div class="card-colors">
-          <div class="color-dot" style="background:#DC2626" title="Rouge vif"></div>
-          <div class="color-dot" style="background:#111827" title="Gris foncé"></div>
-          <div class="color-dot" style="background:#374151" title="Gris moyen"></div>
-          <div class="color-dot" style="background:#9CA3AF" title="Gris clair"></div>
-        </div>
-        <p class="card-price">Tarif recommandé : <strong>800 – 1 500 MAD</strong></p>
-        <a href="theme3-dynamique/index.html" class="card-link red-link">Voir le thème Dynamique →</a>
-      </div>
-    </div>
-
-    <!-- THEME 4 -->
-    <div class="card">
-      <div class="card-preview oasis">OASIS</div>
-      <div class="card-body">
-        <div class="card-tag teal">Thème 4 · Moderne</div>
-        <div class="card-title">Oasis — Turquoise & Blanc</div>
-        <p class="card-desc">Design frais et élégant avec des tons turquoise. Cartes arrondies, typographie douce, ambiance moderne et chaleureuse.</p>
-        <div class="card-colors">
-          <div class="color-dot" style="background:#0D9488" title="Teal foncé"></div>
-          <div class="color-dot" style="background:#14B8A6" title="Teal moyen"></div>
-          <div class="color-dot" style="background:#2DD4BF" title="Teal clair"></div>
-          <div class="color-dot" style="background:#F0FDFA" title="Blanc teal"></div>
-        </div>
-        <p class="card-price">Tarif recommandé : <strong>1 200 – 2 000 MAD</strong></p>
-        <a href="theme4-oasis/index.html" class="card-link teal-link">Voir le thème Oasis →</a>
-      </div>
-    </div>
-
-    <!-- THEME 5 -->
-    <div class="card">
-      <div class="card-preview galaxy">GALAXY</div>
-      <div class="card-body">
-        <div class="card-tag purple">Thème 5 · Tech Premium</div>
-        <div class="card-title">Galaxy — Violet & Or</div>
-        <p class="card-desc">Thème ultra-moderne sombre avec effets néon violets et accents dorés. Pour les agences jeunes et ambitieuses qui veulent se démarquer.</p>
-        <div class="card-colors">
-          <div class="color-dot" style="background:#7C3AED" title="Violet"></div>
-          <div class="color-dot" style="background:#5B21B6" title="Violet foncé"></div>
-          <div class="color-dot" style="background:#A78BFA" title="Violet clair"></div>
-          <div class="color-dot" style="background:#D97706" title="Or"></div>
-        </div>
-        <p class="card-price">Tarif recommandé : <strong>1 500 – 2 500 MAD</strong></p>
-        <a href="theme5-galaxy/index.html" class="card-link purple-link">Voir le thème Galaxy →</a>
-      </div>
-    </div>
-
-
-    <!-- THEME 6 -->
-    <div class="card">
-      <div class="card-preview" style="background:linear-gradient(135deg,#1C0A00,#C2410C);color:#FDE68A;">MARRAKECH</div>
-      <div class="card-body">
-        <div class="card-tag" style="color:#D97706;">Thème 6 · Marocain</div>
-        <div class="card-title">Marrakech — Terracotta & Sable</div>
-        <p class="card-desc">Style marocain authentique avec motifs géométriques, typographie Cinzel et palette terracotta chaleureuse. Unique et mémorable.</p>
+        <div class="card-num">Thème 06 · Terracotta & Sable</div>
+        <div class="card-title">Marrakech</div>
+        <p class="card-desc">Style marocain authentique. Motifs géométriques, typographie Cinzel, palette terracotta chaleureuse.</p>
         <div class="card-colors">
           <div class="color-dot" style="background:#C2410C"></div>
           <div class="color-dot" style="background:#1C0A00"></div>
           <div class="color-dot" style="background:#FEF3C7"></div>
           <div class="color-dot" style="background:#D97706"></div>
         </div>
-        <p class="card-price">Tarif recommandé : <strong>1 200 – 2 000 MAD</strong></p>
-        <a href="theme6-marrakech/index.html" class="card-link" style="background:#C2410C;color:white;">Voir le thème Marrakech →</a>
+        <p class="card-price">Tarif : <strong>1 200 – 2 000 MAD</strong></p>
+        <a href="theme6-marrakech/index.html" class="card-link terra-link">Voir Marrakech →</a>
       </div>
     </div>
 
-    <!-- THEME 7 -->
+    <!-- 3. MAGAZINE -->
     <div class="card">
-      <div class="card-preview" style="background:#0A0A0A;color:#E11D48;">MAGAZINE</div>
+      <div class="card-preview magazine">MAGAZINE<div class="badge">📰 Éditorial</div></div>
       <div class="card-body">
-        <div class="card-tag" style="color:#E11D48;">Thème 7 · Éditorial</div>
-        <div class="card-title">Magazine — Noir & Rouge</div>
-        <p class="card-desc">Style éditorial type magazine automobile. Layout asymétrique, typographie Bebas Neue bold, sections numérotées. Très impact.</p>
+        <div class="card-num">Thème 07 · Noir & Rouge</div>
+        <div class="card-title">Magazine</div>
+        <p class="card-desc">Style magazine automobile. Layout split hero, sections numérotées, Bebas Neue bold. Fort impact.</p>
         <div class="card-colors">
           <div class="color-dot" style="background:#0A0A0A"></div>
           <div class="color-dot" style="background:#E11D48"></div>
           <div class="color-dot" style="background:#FFFFFF;border-color:#334155"></div>
           <div class="color-dot" style="background:#FCD34D"></div>
         </div>
-        <p class="card-price">Tarif recommandé : <strong>1 200 – 2 000 MAD</strong></p>
-        <a href="theme7-magazine/index.html" class="card-link" style="background:#E11D48;color:white;">Voir le thème Magazine →</a>
+        <p class="card-price">Tarif : <strong>1 200 – 2 000 MAD</strong></p>
+        <a href="theme7-magazine/index.html" class="card-link mag-link">Voir Magazine →</a>
       </div>
     </div>
 
-    <!-- THEME 8 -->
+    <!-- 4. MINIMAL -->
     <div class="card">
-      <div class="card-preview" style="background:#FAFAFA;color:#111;font-size:1.6rem;letter-spacing:6px;">MINIMAL</div>
+      <div class="card-preview minimal">MINIMAL<div class="badge" style="color:#111;background:rgba(0,0,0,.1)">🤍 Épuré</div></div>
       <div class="card-body">
-        <div class="card-tag" style="color:#999;">Thème 8 · Minimaliste</div>
-        <div class="card-title">Minimal — Blanc & Noir</div>
-        <p class="card-desc">Design ultra-épuré inspiré Apple. Beaucoup d'espace blanc, typographie DM Serif élégante. Les voitures sont les stars.</p>
+        <div class="card-num">Thème 08 · Blanc & Noir</div>
+        <div class="card-title">Minimal</div>
+        <p class="card-desc">Ultra-épuré style Apple. DM Serif élégant, beaucoup d'espace, les voitures sont les vedettes.</p>
         <div class="card-colors">
           <div class="color-dot" style="background:#FFFFFF;border-color:#334155"></div>
           <div class="color-dot" style="background:#111111"></div>
           <div class="color-dot" style="background:#F3F3F3"></div>
           <div class="color-dot" style="background:#999999"></div>
         </div>
-        <p class="card-price">Tarif recommandé : <strong>800 – 1 500 MAD</strong></p>
-        <a href="theme8-minimal/index.html" class="card-link" style="background:#111;color:white;">Voir le thème Minimal →</a>
+        <p class="card-price">Tarif : <strong>800 – 1 500 MAD</strong></p>
+        <a href="theme8-minimal/index.html" class="card-link min-link">Voir Minimal →</a>
+      </div>
+    </div>
+
+    <!-- 5. MODERNE -->
+    <div class="card">
+      <div class="card-preview moderne">MODERNE<div class="badge">💼 Pro</div></div>
+      <div class="card-body">
+        <div class="card-num">Thème 02 · Bleu & Blanc</div>
+        <div class="card-title">Moderne</div>
+        <p class="card-desc">Design professionnel et intuitif. Interface claire, galerie véhicules, formulaire de réservation.</p>
+        <div class="card-colors">
+          <div class="color-dot" style="background:#1E3A8A"></div>
+          <div class="color-dot" style="background:#2563EB"></div>
+          <div class="color-dot" style="background:#3B82F6"></div>
+          <div class="color-dot" style="background:#FFFFFF;border-color:#334155"></div>
+        </div>
+        <p class="card-price">Tarif : <strong>1 200 – 2 000 MAD</strong></p>
+        <a href="theme2-moderne/index.html" class="card-link blue-link">Voir Moderne →</a>
+      </div>
+    </div>
+
+    <!-- 6. GALAXY -->
+    <div class="card">
+      <div class="card-preview galaxy">GALAXY<div class="badge">🌌 Tech</div></div>
+      <div class="card-body">
+        <div class="card-num">Thème 05 · Violet & Or</div>
+        <div class="card-title">Galaxy</div>
+        <p class="card-desc">Ultra-moderne sombre avec effets néon violets et accents dorés. Pour agences ambitieuses.</p>
+        <div class="card-colors">
+          <div class="color-dot" style="background:#7C3AED"></div>
+          <div class="color-dot" style="background:#5B21B6"></div>
+          <div class="color-dot" style="background:#A78BFA"></div>
+          <div class="color-dot" style="background:#D97706"></div>
+        </div>
+        <p class="card-price">Tarif : <strong>1 500 – 2 000 MAD</strong></p>
+        <a href="theme5-galaxy/index.html" class="card-link purple-link">Voir Galaxy →</a>
+      </div>
+    </div>
+
+    <!-- 7. OASIS -->
+    <div class="card">
+      <div class="card-preview oasis">OASIS<div class="badge">🌿 Frais</div></div>
+      <div class="card-body">
+        <div class="card-num">Thème 04 · Turquoise & Blanc</div>
+        <div class="card-title">Oasis</div>
+        <p class="card-desc">Design frais et élégant en turquoise. Cartes arrondies, Nunito, ambiance moderne et chaleureuse.</p>
+        <div class="card-colors">
+          <div class="color-dot" style="background:#0D9488"></div>
+          <div class="color-dot" style="background:#14B8A6"></div>
+          <div class="color-dot" style="background:#2DD4BF"></div>
+          <div class="color-dot" style="background:#F0FDFA"></div>
+        </div>
+        <p class="card-price">Tarif : <strong>1 200 – 2 000 MAD</strong></p>
+        <a href="theme4-oasis/index.html" class="card-link teal-link">Voir Oasis →</a>
+      </div>
+    </div>
+
+    <!-- 8. DYNAMIQUE -->
+    <div class="card">
+      <div class="card-preview dynamique">DYNAMIQUE<div class="badge">🔥 Impact</div></div>
+      <div class="card-body">
+        <div class="card-num">Thème 03 · Rouge & Gris</div>
+        <div class="card-title">Dynamique</div>
+        <p class="card-desc">Style énergique, fort impact visuel. Animations agressives, galerie véhicules, hero 3D animé.</p>
+        <div class="card-colors">
+          <div class="color-dot" style="background:#DC2626"></div>
+          <div class="color-dot" style="background:#111827"></div>
+          <div class="color-dot" style="background:#374151"></div>
+          <div class="color-dot" style="background:#9CA3AF"></div>
+        </div>
+        <p class="card-price">Tarif : <strong>800 – 1 500 MAD</strong></p>
+        <a href="theme3-dynamique/index.html" class="card-link red-link">Voir Dynamique →</a>
       </div>
     </div>
 
