@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Envoi WhatsApp — Agences Marrakech</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Segoe UI',sans-serif;background:#0F172A;color:white;min-height:100vh;padding:24px;}
+    h1{font-size:1.5rem;font-weight:800;margin-bottom:4px;}
+    .subtitle{color:#64748B;font-size:.88rem;margin-bottom:24px;}
+    .stats{display:flex;gap:16px;margin-bottom:28px;flex-wrap:wrap;}
+    .stat{background:#1E293B;border-radius:12px;padding:14px 20px;text-align:center;min-width:100px;}
+    .stat-num{font-size:1.8rem;font-weight:800;color:#C9A84C;}
+    .stat-lbl{font-size:.7rem;color:#64748B;text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+    .stat-num.green{color:#22C55E;}
+    .stat-num.blue{color:#3B82F6;}
+    .stat-num.orange{color:#F59E0B;}
+
+    /* MESSAGE BOX */
+    .msg-box{background:#1E293B;border-radius:12px;padding:20px;margin-bottom:24px;border:1px solid rgba(255,255,255,.07);}
+    .msg-box label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#64748B;display:block;margin-bottom:8px;}
+    textarea{width:100%;background:#0F172A;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:12px;color:white;font-size:.85rem;line-height:1.6;resize:vertical;min-height:110px;font-family:inherit;outline:none;}
+    textarea:focus{border-color:#C9A84C;}
+    .msg-note{font-size:.72rem;color:#475569;margin-top:6px;}
+
+    /* FILTERS */
+    .filters{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center;}
+    .filter-btn{padding:7px 16px;border-radius:100px;font-size:.76rem;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:transparent;color:#64748B;transition:all .25s;}
+    .filter-btn.active{background:#C9A84C;color:#080808;border-color:#C9A84C;}
+    .filter-btn:hover:not(.active){background:rgba(255,255,255,.05);color:white;}
+    .search-input{background:#1E293B;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:8px 14px;color:white;font-size:.82rem;outline:none;width:200px;}
+    .search-input:focus{border-color:#C9A84C;}
+    .count-label{font-size:.8rem;color:#475569;margin-left:auto;}
+
+    /* TABLE */
+    .table-wrap{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;}
+    thead th{background:#131929;padding:10px 14px;text-align:left;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#475569;border-bottom:1px solid rgba(255,255,255,.06);white-space:nowrap;}
+    tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .2s;}
+    tbody tr:hover{background:rgba(255,255,255,.03);}
+    tbody tr.sent{opacity:.45;}
+    tbody tr.priority{border-left:3px solid #C9A84C;}
+    td{padding:11px 14px;font-size:.83rem;vertical-align:middle;}
+    .td-num{color:#64748B;font-size:.72rem;font-weight:600;width:32px;}
+    .td-name{font-weight:600;color:white;max-width:220px;}
+    .td-name small{display:block;color:#475569;font-size:.7rem;font-weight:400;margin-top:2px;}
+    .td-phone{font-family:monospace;color:#94A3B8;font-size:.78rem;}
+    .badge-web{display:inline-block;padding:2px 8px;border-radius:100px;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+    .badge-web.no {background:rgba(201,168,76,.15);color:#C9A84C;border:1px solid rgba(201,168,76,.3);}
+    .badge-web.yes{background:rgba(100,116,139,.1);color:#475569;border:1px solid rgba(100,116,139,.2);}
+    .stars{color:#F59E0B;font-size:.72rem;}
+    .btn-send{background:#25D366;color:white;border:none;padding:7px 16px;border-radius:8px;font-size:.76rem;font-weight:700;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:all .25s;text-decoration:none;}
+    .btn-send:hover{background:#128C7E;}
+    .btn-send.done{background:#1E293B;color:#22C55E;border:1px solid rgba(34,197,94,.3);cursor:default;pointer-events:none;}
+    .btn-copy{background:transparent;color:#64748B;border:1px solid rgba(255,255,255,.08);padding:7px 12px;border-radius:8px;font-size:.72rem;cursor:pointer;transition:all .25s;}
+    .btn-copy:hover{background:rgba(255,255,255,.05);color:white;}
+    .actions{display:flex;gap:6px;align-items:center;}
+    .progress-bar{background:#0F172A;border-radius:100px;height:6px;margin-bottom:24px;overflow:hidden;}
+    .progress-fill{background:linear-gradient(90deg,#C9A84C,#F0D080);height:100%;border-radius:100px;transition:width .5s;}
+
+    /* PRIORITY TAG */
+    .priority-tag{background:rgba(201,168,76,.12);color:#C9A84C;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:2px 7px;border-radius:4px;margin-left:6px;}
+  </style>
+</head>
+<body>
+
+<h1>📤 Envoi WhatsApp — Agences Marrakech</h1>
+<p class="subtitle">Contacts 68 → 111 · Déjà envoyés : 67 premiers</p>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num" id="statTotal">0</div><div class="stat-lbl">Restants</div></div>
+  <div class="stat"><div class="stat-num green" id="statSent">0</div><div class="stat-lbl">Envoyés</div></div>
+  <div class="stat"><div class="stat-num orange" id="statPriority">0</div><div class="stat-lbl">Sans site ⭐</div></div>
+  <div class="stat"><div class="stat-num blue" id="statLeft">0</div><div class="stat-lbl">À envoyer</div></div>
+</div>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+<div class="msg-box">
+  <label>Message WhatsApp (personnalisez le nom entre [ ])</label>
+  <textarea id="msgTemplate">Salam 👋 Je suis développeur web spécialisé dans les agences de location à Marrakech.
+
+J'ai créé des modèles de sites professionnels pour agences comme la vôtre ✅
+
+👉 Voir les 8 designs : https://elite-carsx.vercel.app/
+
+✅ Site livré en 48h
+✅ Votre nom et photos intégrés
+✅ Bouton WhatsApp + réservation
+✅ À partir de 800 MAD
+
+Ça vous intéresse ? 🙏</textarea>
+  <p class="msg-note">💡 Tip : Le bouton WhatsApp ouvre une conversation avec le message pré-rempli. Cliquez "Envoyer" dans WhatsApp.</p>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="setFilter('all')">Tous (<span id="cAll">0</span>)</button>
+  <button class="filter-btn" onclick="setFilter('priority')">⭐ Sans site web (<span id="cPriority">0</span>)</button>
+  <button class="filter-btn" onclick="setFilter('pending')">À envoyer (<span id="cPending">0</span>)</button>
+  <button class="filter-btn" onclick="setFilter('sent')">✅ Envoyés (<span id="cSent">0</span>)</button>
+  <input class="search-input" type="text" id="searchInput" placeholder="🔍 Chercher agence..." oninput="renderTable()"/>
+  <span class="count-label" id="countLabel"></span>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Agence</th>
+        <th>Téléphone</th>
+        <th>Site web</th>
+        <th>Note</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<script>
+const STORAGE_KEY = 'elite_sent_68_111';
+const DEMO_URL = 'https://elite-carsx.vercel.app/';
+
+const contacts = [
+  {name:"Aghmat Cars Marrakech",phone:"212666906910",hasWeb:true,rating:"5.0"},
+  {name:"WHeeGO rent car marrakech",phone:"212661340838",hasWeb:true,rating:"1.7"},
+  {name:"Marrakech Car Rental – DEHBI LUX",phone:"212679564277",hasWeb:true,rating:"4.9"},
+  {name:"Location Marrakech Voiture",phone:"212668098933",hasWeb:true,rating:"4.9"},
+  {name:"Biscou rent car Location Voiture Marrakech",phone:"212633101661",hasWeb:true,rating:"4.9"},
+  {name:"Wafajet Car rental Marrakech",phone:"212661084548",hasWeb:true,rating:"4.8"},
+  {name:"Exclusifs Car Marrakech",phone:"212670422105",hasWeb:false,rating:""},
+  {name:"Jacaranda Car rental",phone:"212662151010",hasWeb:true,rating:"5.0"},
+  {name:"Agence de location voiture Marrakech - Salas car",phone:"212661149360",hasWeb:true,rating:"5.0"},
+  {name:"Just here car",phone:"212636274401",hasWeb:true,rating:"4.8"},
+  {name:"Rent For You : Location de voiture à Marrakech",phone:"212670912797",hasWeb:true,rating:"4.9"},
+  {name:"Relacars Marrakech Aéroport",phone:"212624068379",hasWeb:true,rating:"5.0"},
+  {name:"Marrakech Gold Car",phone:"212661118995",hasWeb:false,rating:"4.6"},
+  {name:"Rent cars marrakech - location voiture marrakech",phone:"212662719367",hasWeb:true,rating:"4.9"},
+  {name:"Car Rental Ltd Location Voiture Marrakech",phone:"212661601990",hasWeb:true,rating:"4.9"},
+  {name:"Europcar Marrakech",phone:"212524431228",hasWeb:true,rating:"3.7"},
+  {name:"Budget Marrakech Airport",phone:"212524370237",hasWeb:true,rating:"2.3"},
+  {name:"Sweet Tour",phone:"212632047047",hasWeb:true,rating:"4.8"},
+  {name:"Green Motion Car Rental Marrakech Airport",phone:"212623520904",hasWeb:true,rating:"4.5"},
+  {name:"Oyama car",phone:"212673724646",hasWeb:true,rating:"4.9"},
+  {name:"RedKech Car - Location voiture Marrakech",phone:"212600238096",hasWeb:true,rating:"5.0"},
+  {name:"Surprice Car Marrakech",phone:"212660797089",hasWeb:true,rating:"3.4"},
+  {name:"Car Rental-Electric-Location Voiture Marrakech",phone:"212661909521",hasWeb:true,rating:"5.0"},
+  {name:"Location voiture Marrakech - Chip Chip Car",phone:"212707799064",hasWeb:true,rating:"4.5"},
+  {name:"Location De Voitures Marrakech Sadik Car Rental",phone:"212654160992",hasWeb:true,rating:"4.8"},
+  {name:"Location de voiture Marrakech Mondial Auto Location",phone:"212661892523",hasWeb:false,rating:"5.0"},
+  {name:"Location de Voitures à Marrakech Aéroport",phone:"212717729575",hasWeb:true,rating:"5.0"},
+  {name:"Majdoline Travel",phone:"212618700526",hasWeb:true,rating:"4.8"},
+  {name:"Sixt Rent a Car Marrakech",phone:"212600077800",hasWeb:true,rating:"4.4"},
+  {name:"Aichou Cars",phone:"212661131034",hasWeb:true,rating:"4.7"},
+  {name:"RPrestige Rent cars marrakech",phone:"212666897564",hasWeb:true,rating:"5.0"},
+  {name:"Select rent a car",phone:"212661445979",hasWeb:true,rating:"4.4"},
+  {name:"Go RENT CAR",phone:"212664342254",hasWeb:true,rating:"5.0"},
+  {name:"Crystal Cars Marrakech",phone:"212664648585",hasWeb:false,rating:"4.9"},
+  {name:"Global Rent A Car - Marrakech Airport",phone:"212661303743",hasWeb:false,rating:"1.8"},
+  {name:"Atlas Kadi Luxury Car",phone:"212661211438",hasWeb:true,rating:"4.7"},
+  {name:"Mrini & Talbi Rental car",phone:"212608545555",hasWeb:true,rating:"4.7"},
+  {name:"TONOGA LUXURY CARS MARRAKECH",phone:"212661661344",hasWeb:true,rating:"5.0"},
+  {name:"Mustaphawi Car Rent",phone:"212666714882",hasWeb:true,rating:"4.9"},
+  {name:"Lynx cars - location voiture Marrakech",phone:"212661692642",hasWeb:true,rating:"4.8"},
+  {name:"MARRAKECH AALAOUI CAR",phone:"212701285646",hasWeb:true,rating:"5.0"},
+  {name:"Lina Travel Marrakech",phone:"212626249939",hasWeb:true,rating:"5.0"},
+  {name:"Motivation-cars location 4x4 Marrakech",phone:"212661385101",hasWeb:true,rating:"4.8"},
+  {name:"Mymobirent Aéroport Marrakech",phone:"212663311384",hasWeb:true,rating:"4.3"}
+];
+
+let sentSet = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
+let currentFilter = 'all';
+
+function getSentArr() { return [...sentSet]; }
+function saveSent() { localStorage.setItem(STORAGE_KEY, JSON.stringify(getSentArr())); }
+
+function buildMessage(agencyName) {
+  return document.getElementById('msgTemplate').value;
+}
+
+function makeWaLink(phone, name) {
+  const msg = encodeURIComponent(buildMessage(name));
+  return `https://wa.me/${phone}?text=${msg}`;
+}
+
+function markSent(idx) {
+  sentSet.add(idx);
+  saveSent();
+  renderTable();
+  updateStats();
+}
+
+function getFiltered() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  return contacts.filter((c, i) => {
+    const matchSearch = !q || c.name.toLowerCase().includes(q) || c.phone.includes(q);
+    const matchFilter =
+      currentFilter === 'all'      ? true :
+      currentFilter === 'priority' ? !c.hasWeb :
+      currentFilter === 'pending'  ? !sentSet.has(i) :
+      currentFilter === 'sent'     ? sentSet.has(i) : true;
+    return matchSearch && matchFilter;
+  }).map((c, _, arr) => ({...c, idx: contacts.indexOf(c)}));
+}
+
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach((b,i) => b.classList.toggle('active', ['all','priority','pending','sent'][i]===f));
+  renderTable();
+}
+
+function renderTable() {
+  const rows = getFiltered();
+  const tbody = document.getElementById('tableBody');
+  document.getElementById('countLabel').textContent = `${rows.length} agence(s) affichée(s)`;
+
+  tbody.innerHTML = rows.map((c, i) => {
+    const sent = sentSet.has(c.idx);
+    const priority = !c.hasWeb;
+    const displayPhone = '+' + c.phone.replace(/(\d{3})(\d{1})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2$3 $4 $5 $6');
+    return `<tr class="${sent ? 'sent' : ''} ${priority ? 'priority' : ''}">
+      <td class="td-num">${c.idx + 68}</td>
+      <td class="td-name">
+        ${c.name}${priority ? '<span class="priority-tag">⭐ Sans site</span>' : ''}
+      </td>
+      <td class="td-phone">${displayPhone}</td>
+      <td><span class="badge-web ${c.hasWeb ? 'yes' : 'no'}">${c.hasWeb ? 'A un site' : 'SANS SITE'}</span></td>
+      <td class="stars">${c.rating ? '★ ' + c.rating : '—'}</td>
+      <td>
+        <div class="actions">
+          ${sent
+            ? `<button class="btn-send done">✅ Envoyé</button>`
+            : `<a href="${makeWaLink(c.phone, c.name)}" target="_blank" class="btn-send" onclick="setTimeout(()=>markSent(${c.idx}),1500)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Envoyer
+              </a>
+              <button class="btn-copy" onclick="navigator.clipboard.writeText('${makeWaLink(c.phone, c.name).replace(/'/g,"\\'")}');this.textContent='✓';setTimeout(()=>this.textContent='📋',1500)">📋</button>`
+          }
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function updateStats() {
+  const total = contacts.length;
+  const sent = sentSet.size;
+  const priority = contacts.filter(c => !c.hasWeb).length;
+  const left = total - sent;
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statSent').textContent = sent;
+  document.getElementById('statPriority').textContent = priority;
+  document.getElementById('statLeft').textContent = left;
+  document.getElementById('progressFill').style.width = ((sent / total) * 100) + '%';
+
+  document.getElementById('cAll').textContent = total;
+  document.getElementById('cPriority').textContent = priority;
+  document.getElementById('cPending').textContent = left;
+  document.getElementById('cSent').textContent = sent;
+}
+
+// Init
+updateStats();
+renderTable();
+document.getElementById('msgTemplate').addEventListener('input', renderTable);
+</script>
+</body>
+</html>
