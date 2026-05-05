@@ -1,90 +1,121 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Elite Cars — 8 Thèmes de Sites Web</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #0A0F1E; color: white; min-height: 100vh; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Inter',sans-serif;background:#060B18;color:white;min-height:100vh;overflow-x:hidden;}
 
-    header { text-align: center; padding: 56px 20px 36px; }
-    .header-tag { display: inline-block; background: rgba(255,255,255,.06); color: #64748B; padding: 5px 14px; border-radius: 100px; font-size: .7rem; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 16px; border: 1px solid rgba(255,255,255,.08); }
-    header h1 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 800; margin-bottom: 10px; letter-spacing: -.5px; }
-    header p { color: #475569; font-size: .9rem; max-width: 460px; margin: 0 auto; line-height: 1.7; }
+    /* ANIMATED CANVAS BG */
+    #bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-      padding: 0 32px 56px;
-      max-width: 1400px;
-      margin: 0 auto;
+    /* RADIAL GLOW OVERLAY */
+    .bg-glow{position:fixed;inset:0;z-index:1;pointer-events:none;
+      background:
+        radial-gradient(ellipse 70% 50% at 20% 30%, rgba(201,168,76,.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 70%, rgba(59,130,246,.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 50% 50%, rgba(124,58,237,.04) 0%, transparent 70%);
     }
 
-    .card { background: #131929; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.06); transition: transform .3s, border-color .3s, box-shadow .3s; }
-    .card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,.14); box-shadow: 0 16px 48px rgba(0,0,0,.4); }
+    /* CONTENT */
+    .content{position:relative;z-index:2;}
 
-    .card-preview { height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 1.6rem; font-weight: 800; letter-spacing: 4px; position: relative; overflow: hidden; }
-    .card-preview .badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,.35); backdrop-filter: blur(8px); color: rgba(255,255,255,.8); font-size: .55rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 9px; border-radius: 100px; }
+    header{text-align:center;padding:60px 20px 40px;}
+    .header-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);color:#64748B;padding:5px 16px;border-radius:100px;font-size:.68rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:20px;border:1px solid rgba(255,255,255,.07);backdrop-filter:blur(12px);}
+    .header-eyebrow::before{content:'';width:6px;height:6px;background:#C9A84C;border-radius:50%;animation:pulse 2s ease-in-out infinite;}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+    header h1{font-size:clamp(2rem,4vw,3rem);font-weight:800;margin-bottom:12px;letter-spacing:-.5px;
+      background:linear-gradient(135deg,#ffffff 0%,#C9A84C 50%,#ffffff 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    header p{color:#475569;font-size:.92rem;max-width:480px;margin:0 auto;line-height:1.75;}
 
-    .elegance  { background: linear-gradient(135deg, #080808, #1a1a1a); color: #C9A84C; }
-    .marrakech { background: linear-gradient(135deg, #1C0A00, #C2410C); color: #FDE68A; }
-    .magazine  { background: #0A0A0A; color: #E11D48; }
-    .minimal   { background: linear-gradient(135deg, #F3F3F3, #E8E8E8); color: #111; }
-    .moderne   { background: linear-gradient(135deg, #1E3A8A, #3B82F6); color: white; }
-    .galaxy    { background: linear-gradient(135deg, #08051A, #5B21B6); color: #A78BFA; }
-    .oasis     { background: linear-gradient(135deg, #0D2B29, #0D9488); color: #2DD4BF; }
-    .dynamique { background: linear-gradient(135deg, #111827, #374151); color: #DC2626; }
+    /* CARDS GRID */
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:0 28px 60px;max-width:1400px;margin:0 auto;}
 
-    .card-body { padding: 18px 18px 20px; }
-    .card-num  { font-size: .6rem; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; }
-    .card-title { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
-    .card-desc { font-size: .78rem; color: #475569; line-height: 1.55; margin-bottom: 14px; }
-    .card-colors { display: flex; gap: 6px; margin-bottom: 14px; }
-    .color-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(255,255,255,.15); }
-    .card-price { font-size: .74rem; color: #334155; margin-bottom: 14px; }
-    .card-price strong { color: #94A3B8; font-size: .88rem; }
-    .card-link { display: block; text-align: center; padding: 11px; border-radius: 8px; font-weight: 700; font-size: .78rem; text-decoration: none; transition: all .3s; letter-spacing: .3px; }
+    .card{
+      background:rgba(19,25,41,.75);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      border-radius:16px;overflow:hidden;
+      border:1px solid rgba(255,255,255,.07);
+      transition:transform .35s cubic-bezier(.34,1.56,.64,1), border-color .35s, box-shadow .35s;
+    }
+    .card:hover{transform:translateY(-8px) scale(1.01);border-color:rgba(255,255,255,.18);box-shadow:0 24px 64px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.08);}
 
-    .gold-link   { background: #C9A84C; color: #080808; }
-    .gold-link:hover { background: #F0D080; }
-    .terra-link  { background: #C2410C; color: white; }
-    .terra-link:hover { background: #9A3412; }
-    .mag-link    { background: #E11D48; color: white; }
-    .mag-link:hover { background: #BE123C; }
-    .min-link    { background: #111; color: white; }
-    .min-link:hover { background: #333; }
-    .blue-link   { background: #2563EB; color: white; }
-    .blue-link:hover { background: #1E40AF; }
-    .purple-link { background: linear-gradient(135deg, #7C3AED, #5B21B6); color: white; }
-    .purple-link:hover { opacity: .85; }
-    .teal-link   { background: #0D9488; color: white; }
-    .teal-link:hover { background: #0F766E; }
-    .red-link    { background: #DC2626; color: white; }
-    .red-link:hover { background: #B91C1C; }
+    /* CARD PREVIEW */
+    .card-preview{height:148px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:1.5rem;font-weight:800;letter-spacing:4px;position:relative;overflow:hidden;}
+    .card-preview::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.4));pointer-events:none;}
+    .card-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.4);backdrop-filter:blur(10px);color:rgba(255,255,255,.85);font-size:.52rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 9px;border-radius:100px;border:1px solid rgba(255,255,255,.1);z-index:1;}
+    .card-num-bg{position:absolute;bottom:-10px;left:12px;font-size:5rem;font-weight:800;opacity:.07;line-height:1;pointer-events:none;}
 
-    footer { text-align: center; padding: 28px; border-top: 1px solid rgba(255,255,255,.05); color: #1E293B; font-size: .76rem; }
+    .elegance  {background:linear-gradient(135deg,#080808 0%,#1a1a1a 50%,#0a0a0a 100%);color:#C9A84C;}
+    .marrakech {background:linear-gradient(135deg,#1C0A00 0%,#7C1D00 50%,#C2410C 100%);color:#FDE68A;}
+    .magazine  {background:linear-gradient(135deg,#0A0A0A 0%,#1a0005 50%,#0A0A0A 100%);color:#E11D48;}
+    .minimal   {background:linear-gradient(135deg,#E8E8E8 0%,#F8F8F8 50%,#ECECEC 100%);color:#111;}
+    .moderne   {background:linear-gradient(135deg,#0F1F5C 0%,#1E3A8A 50%,#2563EB 100%);color:white;}
+    .galaxy    {background:linear-gradient(135deg,#06031A 0%,#2D0E72 50%,#5B21B6 100%);color:#A78BFA;}
+    .oasis     {background:linear-gradient(135deg,#031A17 0%,#0A3B35 50%,#0D9488 100%);color:#2DD4BF;}
+    .dynamique {background:linear-gradient(135deg,#0A0F14 0%,#1F2937 50%,#374151 100%);color:#DC2626;}
 
-    @media (max-width: 1100px) { .cards { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 780px)  { .cards { grid-template-columns: repeat(2, 1fr); padding: 0 16px 40px; gap: 14px; } }
-    @media (max-width: 480px)  { .cards { grid-template-columns: 1fr; } }
+    .card-body{padding:16px 18px 20px;}
+    .card-num{font-size:.58rem;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;}
+    .card-title{font-size:.98rem;font-weight:700;margin-bottom:6px;color:white;}
+    .card-desc{font-size:.76rem;color:#475569;line-height:1.6;margin-bottom:13px;}
+    .card-colors{display:flex;gap:5px;margin-bottom:13px;}
+    .color-dot{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.12);}
+    .card-price{font-size:.72rem;color:#334155;margin-bottom:13px;}
+    .card-price strong{color:#94A3B8;font-size:.86rem;}
+    .card-link{display:block;text-align:center;padding:10px;border-radius:8px;font-weight:700;font-size:.76rem;text-decoration:none;transition:all .3s;letter-spacing:.3px;}
+
+    .gold-link  {background:linear-gradient(135deg,#C9A84C,#8B6914);color:#fff;}
+    .gold-link:hover{background:linear-gradient(135deg,#F0D080,#C9A84C);color:#080808;}
+    .terra-link {background:linear-gradient(135deg,#C2410C,#7C1D00);color:white;}
+    .terra-link:hover{opacity:.85;}
+    .mag-link   {background:linear-gradient(135deg,#E11D48,#9F1239);color:white;}
+    .mag-link:hover{opacity:.85;}
+    .min-link   {background:linear-gradient(135deg,#111,#333);color:white;}
+    .min-link:hover{background:linear-gradient(135deg,#333,#555);}
+    .blue-link  {background:linear-gradient(135deg,#2563EB,#1E3A8A);color:white;}
+    .blue-link:hover{opacity:.85;}
+    .purple-link{background:linear-gradient(135deg,#7C3AED,#4C1D95);color:white;}
+    .purple-link:hover{opacity:.85;}
+    .teal-link  {background:linear-gradient(135deg,#0D9488,#065F55);color:white;}
+    .teal-link:hover{opacity:.85;}
+    .red-link   {background:linear-gradient(135deg,#DC2626,#7F1D1D);color:white;}
+    .red-link:hover{opacity:.85;}
+
+    footer{position:relative;z-index:2;text-align:center;padding:28px;border-top:1px solid rgba(255,255,255,.05);color:#1E293B;font-size:.75rem;}
+
+    @media(max-width:1100px){.cards{grid-template-columns:repeat(3,1fr);}}
+    @media(max-width:780px) {.cards{grid-template-columns:repeat(2,1fr);padding:0 16px 40px;gap:12px;}}
+    @media(max-width:480px) {.cards{grid-template-columns:1fr;}}
   </style>
 </head>
 <body>
 
+<canvas id="bgCanvas"></canvas>
+<div class="bg-glow"></div>
+
+<div class="content">
   <header>
-    <div class="header-tag">Elite Cars Marrakech</div>
+    <div class="header-eyebrow">Elite Cars Marrakech</div>
     <h1>8 Thèmes de Sites Web</h1>
-    <p>Cliquez sur un thème pour prévisualiser le site complet. Chaque thème est 100% fonctionnel et personnalisable.</p>
+    <p>Cliquez sur un thème pour prévisualiser le site complet. Chaque thème est 100% fonctionnel et personnalisable pour votre agence.</p>
   </header>
 
   <div class="cards">
 
     <!-- 1. ÉLÉGANCE -->
     <div class="card">
-      <div class="card-preview elegance">ÉLÉGANCE<div class="badge">⭐ Premium</div></div>
+      <div class="card-preview elegance">
+        <span>ÉLÉGANCE</span>
+        <div class="card-badge">⭐ Premium</div>
+        <div class="card-num-bg">01</div>
+      </div>
       <div class="card-body">
         <div class="card-num">Thème 01 · Noir & Or</div>
         <div class="card-title">Élégance</div>
@@ -102,7 +133,11 @@
 
     <!-- 2. MARRAKECH -->
     <div class="card">
-      <div class="card-preview marrakech">MARRAKECH<div class="badge">🕌 Marocain</div></div>
+      <div class="card-preview marrakech">
+        <span>MARRAKECH</span>
+        <div class="card-badge">🕌 Marocain</div>
+        <div class="card-num-bg">06</div>
+      </div>
       <div class="card-body">
         <div class="card-num">Thème 06 · Terracotta & Sable</div>
         <div class="card-title">Marrakech</div>
@@ -120,7 +155,11 @@
 
     <!-- 3. MAGAZINE -->
     <div class="card">
-      <div class="card-preview magazine">MAGAZINE<div class="badge">📰 Éditorial</div></div>
+      <div class="card-preview magazine">
+        <span>MAGAZINE</span>
+        <div class="card-badge">📰 Éditorial</div>
+        <div class="card-num-bg">07</div>
+      </div>
       <div class="card-body">
         <div class="card-num">Thème 07 · Noir & Rouge</div>
         <div class="card-title">Magazine</div>
@@ -138,11 +177,15 @@
 
     <!-- 4. MINIMAL -->
     <div class="card">
-      <div class="card-preview minimal">MINIMAL<div class="badge" style="color:#111;background:rgba(0,0,0,.1)">🤍 Épuré</div></div>
+      <div class="card-preview minimal">
+        <span>MINIMAL</span>
+        <div class="card-badge" style="color:#111;background:rgba(0,0,0,.08);border-color:rgba(0,0,0,.1);">🤍 Épuré</div>
+        <div class="card-num-bg" style="color:#000">08</div>
+      </div>
       <div class="card-body">
         <div class="card-num">Thème 08 · Blanc & Noir</div>
         <div class="card-title">Minimal</div>
-        <p class="card-desc">Ultra-épuré style Apple. DM Serif élégant, beaucoup d'espace, les voitures sont les vedettes.</p>
+        <p class="card-desc">Ultra-épuré style Apple. DM Serif élégant, espace généreux, les voitures sont les vedettes.</p>
         <div class="card-colors">
           <div class="color-dot" style="background:#FFFFFF;border-color:#334155"></div>
           <div class="color-dot" style="background:#111111"></div>
@@ -156,7 +199,11 @@
 
     <!-- 5. MODERNE -->
     <div class="card">
-      <div class="card-preview moderne">MODERNE<div class="badge">💼 Pro</div></div>
+      <div class="card-preview moderne">
+        <span>MODERNE</span>
+        <div class="card-badge">💼 Pro</div>
+        <div class="card-num-bg">02</div>
+      </div>
       <div class="card-body">
         <div class="card-num">Thème 02 · Bleu & Blanc</div>
         <div class="card-title">Moderne</div>
@@ -174,7 +221,11 @@
 
     <!-- 6. GALAXY -->
     <div class="card">
-      <div class="card-preview galaxy">GALAXY<div class="badge">🌌 Tech</div></div>
+      <div class="card-preview galaxy">
+        <span>GALAXY</span>
+        <div class="card-badge">🌌 Tech</div>
+        <div class="card-num-bg">05</div>
+      </div>
       <div class="card-body">
         <div class="card-num">Thème 05 · Violet & Or</div>
         <div class="card-title">Galaxy</div>
@@ -192,7 +243,11 @@
 
     <!-- 7. OASIS -->
     <div class="card">
-      <div class="card-preview oasis">OASIS<div class="badge">🌿 Frais</div></div>
+      <div class="card-preview oasis">
+        <span>OASIS</span>
+        <div class="card-badge">🌿 Frais</div>
+        <div class="card-num-bg">04</div>
+      </div>
       <div class="card-body">
         <div class="card-num">Thème 04 · Turquoise & Blanc</div>
         <div class="card-title">Oasis</div>
@@ -210,11 +265,15 @@
 
     <!-- 8. DYNAMIQUE -->
     <div class="card">
-      <div class="card-preview dynamique">DYNAMIQUE<div class="badge">🔥 Impact</div></div>
+      <div class="card-preview dynamique">
+        <span>DYNAMIQUE</span>
+        <div class="card-badge">🔥 Impact</div>
+        <div class="card-num-bg">03</div>
+      </div>
       <div class="card-body">
         <div class="card-num">Thème 03 · Rouge & Gris</div>
         <div class="card-title">Dynamique</div>
-        <p class="card-desc">Style énergique, fort impact visuel. Animations agressives, galerie véhicules, hero 3D animé.</p>
+        <p class="card-desc">Style énergique, fort impact visuel. Animations agressives, galerie véhicules, hero animé.</p>
         <div class="card-colors">
           <div class="color-dot" style="background:#DC2626"></div>
           <div class="color-dot" style="background:#111827"></div>
@@ -229,5 +288,154 @@
   </div>
 
   <footer>© 2025 Elite Cars Marrakech — Démos créées pour présentation aux agences de location à Marrakech</footer>
+</div>
+
+<script>
+/* ═══ ANIMATED INTERACTIVE BACKGROUND ═══ */
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+
+let W, H, particles, mouse = {x: -999, y: -999};
+const PARTICLE_COUNT = 120;
+const CONNECTION_DIST = 140;
+const MOUSE_REPEL_DIST = 120;
+
+/* Color palette for particles */
+const COLORS = [
+  'rgba(201,168,76,',   // gold
+  'rgba(59,130,246,',   // blue
+  'rgba(124,58,237,',   // purple
+  'rgba(13,148,136,',   // teal
+  'rgba(220,38,38,',    // red
+  'rgba(255,255,255,',  // white
+];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+class Particle {
+  constructor() { this.reset(true); }
+  reset(init) {
+    this.x = Math.random() * W;
+    this.y = init ? Math.random() * H : -10;
+    this.vx = (Math.random() - .5) * .5;
+    this.vy = Math.random() * .4 + .1;
+    this.size = Math.random() * 2.2 + .5;
+    this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    this.alpha = Math.random() * .5 + .15;
+    this.pulse = Math.random() * Math.PI * 2;
+    this.pulseSpeed = Math.random() * .02 + .01;
+  }
+  update() {
+    this.pulse += this.pulseSpeed;
+    const currentAlpha = this.alpha + Math.sin(this.pulse) * .08;
+
+    // Mouse repulsion
+    const dx = this.x - mouse.x;
+    const dy = this.y - mouse.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < MOUSE_REPEL_DIST) {
+      const force = (MOUSE_REPEL_DIST - dist) / MOUSE_REPEL_DIST;
+      this.vx += (dx / dist) * force * .6;
+      this.vy += (dy / dist) * force * .6;
+    }
+
+    // Dampen velocity
+    this.vx *= .98;
+    this.vy *= .98;
+    // Restore base drift
+    this.vy += .003;
+
+    this.x += this.vx;
+    this.y += this.vy;
+
+    // Draw
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = this.color + Math.min(currentAlpha, .8) + ')';
+    ctx.fill();
+
+    // Reset if out of bounds
+    if (this.y > H + 20 || this.x < -50 || this.x > W + 50) this.reset(false);
+  }
+}
+
+function init() {
+  resize();
+  particles = Array.from({length: PARTICLE_COUNT}, () => new Particle());
+}
+
+function drawConnections() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < CONNECTION_DIST) {
+        const alpha = (1 - dist / CONNECTION_DIST) * .25;
+        // Pick color from first particle
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = particles[i].color + alpha + ')';
+        ctx.lineWidth = .6;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function drawMouseGlow() {
+  if (mouse.x < 0) return;
+  const grad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 180);
+  grad.addColorStop(0, 'rgba(201,168,76,.08)');
+  grad.addColorStop(1, 'rgba(201,168,76,0)');
+  ctx.beginPath();
+  ctx.arc(mouse.x, mouse.y, 180, 0, Math.PI * 2);
+  ctx.fillStyle = grad;
+  ctx.fill();
+}
+
+let frame = 0;
+function animate() {
+  requestAnimationFrame(animate);
+  ctx.clearRect(0, 0, W, H);
+
+  // Subtle gradient bg
+  if (frame % 2 === 0) {
+    const bgGrad = ctx.createRadialGradient(W*.5, H*.5, 0, W*.5, H*.5, Math.max(W, H));
+    bgGrad.addColorStop(0, 'rgba(8,12,28,0)');
+    bgGrad.addColorStop(1, 'rgba(4,6,14,0)');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  drawMouseGlow();
+  drawConnections();
+  particles.forEach(p => p.update());
+  frame++;
+}
+
+/* MOUSE TRACKING — on canvas but works on whole page */
+document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+document.addEventListener('mouseleave', () => { mouse.x = -999; mouse.y = -999; });
+
+/* TOUCH SUPPORT */
+document.addEventListener('touchmove', e => {
+  mouse.x = e.touches[0].clientX;
+  mouse.y = e.touches[0].clientY;
+}, {passive: true});
+document.addEventListener('touchend', () => { mouse.x = -999; mouse.y = -999; });
+
+window.addEventListener('resize', () => {
+  resize();
+  particles.forEach(p => { if (p.x > W) p.x = Math.random() * W; });
+});
+
+init();
+animate();
+</script>
 </body>
 </html>
