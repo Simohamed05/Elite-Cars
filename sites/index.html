@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elite Cars — 5 Thèmes de Sites Web</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #0F172A; color: white; min-height: 100vh; }
+    header { text-align: center; padding: 60px 20px 40px; }
+    .header-tag { display: inline-block; background: rgba(255,255,255,.08); color: #94A3B8; padding: 6px 16px; border-radius: 100px; font-size: .75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; border: 1px solid rgba(255,255,255,.1); }
+    header h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; margin-bottom: 12px; }
+    header p { color: #64748B; font-size: 1rem; max-width: 520px; margin: 0 auto; line-height: 1.7; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; padding: 0 40px 60px; max-width: 1280px; margin: 0 auto; }
+    .card { background: #1E293B; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,.07); transition: transform .3s, border-color .3s; }
+    .card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,.15); }
+    .card-preview { height: 200px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800; letter-spacing: 4px; }
+    .card-preview.elegance { background: linear-gradient(135deg, #080808, #1a1a1a); color: #C9A84C; }
+    .card-preview.moderne { background: linear-gradient(135deg, #1E3A8A, #3B82F6); color: white; }
+    .card-preview.dynamique { background: linear-gradient(135deg, #111827, #374151); color: #DC2626; }
+    .card-preview.oasis { background: linear-gradient(135deg, #0D2B29, #0D9488); color: #2DD4BF; }
+    .card-preview.galaxy { background: linear-gradient(135deg, #08051A, #5B21B6); color: #A78BFA; }
+    .card-body { padding: 24px; }
+    .card-tag { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+    .card-tag.gold { color: #C9A84C; }
+    .card-tag.blue { color: #3B82F6; }
+    .card-tag.red { color: #DC2626; }
+    .card-tag.teal { color: #14B8A6; }
+    .card-tag.purple { color: #A78BFA; }
+    .card-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+    .card-desc { font-size: .85rem; color: #64748B; line-height: 1.6; margin-bottom: 20px; }
+    .card-colors { display: flex; gap: 8px; margin-bottom: 20px; }
+    .color-dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,.2); }
+    .card-price { font-size: .8rem; color: #475569; margin-bottom: 20px; }
+    .card-price strong { color: white; font-size: .95rem; }
+    .card-link { display: block; text-align: center; padding: 13px; border-radius: 8px; font-weight: 700; font-size: .85rem; text-decoration: none; transition: all .3s; }
+    .card-link.gold-link { background: #C9A84C; color: #080808; }
+    .card-link.gold-link:hover { background: #F0D080; }
+    .card-link.blue-link { background: #2563EB; color: white; }
+    .card-link.blue-link:hover { background: #1E40AF; }
+    .card-link.red-link { background: #DC2626; color: white; }
+    .card-link.red-link:hover { background: #B91C1C; }
+    .card-link.teal-link { background: #0D9488; color: white; }
+    .card-link.teal-link:hover { background: #0F766E; }
+    .card-link.purple-link { background: linear-gradient(135deg, #7C3AED, #5B21B6); color: white; }
+    .card-link.purple-link:hover { background: linear-gradient(135deg, #6D28D9, #4C1D95); }
+    footer { text-align: center; padding: 32px; border-top: 1px solid rgba(255,255,255,.07); color: #334155; font-size: .8rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-tag">Elite Cars Marrakech</div>
+    <h1>5 Thèmes de Sites Web</h1>
+    <p>Cliquez sur un thème pour prévisualiser le site complet. Chaque thème est 100% fonctionnel et prêt à personnaliser pour votre agence.</p>
+  </header>
+
+  <div class="cards">
+
+    <!-- THEME 1 -->
+    <div class="card">
+      <div class="card-preview elegance">ÉLÉGANCE</div>
+      <div class="card-body">
+        <div class="card-tag gold">Thème 1 · Premium</div>
+        <div class="card-title">Élégance — Noir & Or</div>
+        <p class="card-desc">Style luxueux et raffiné pour les agences premium. Animation cinématique, curseur personnalisé, design sobre et doré.</p>
+        <div class="card-colors">
+          <div class="color-dot" style="background:#080808" title="Noir profond"></div>
+          <div class="color-dot" style="background:#C9A84C" title="Or métallique"></div>
+          <div class="color-dot" style="background:#F0D080" title="Or clair"></div>
+          <div class="color-dot" style="background:#1A1A1A" title="Sombre"></div>
+        </div>
+        <p class="card-price">Tarif recommandé : <strong>3 000 – 4 000 MAD</strong></p>
+        <a href="theme1-elegance/index.html" class="card-link gold-link">Voir le thème Élégance →</a>
+      </div>
+    </div>
+
+    <!-- THEME 2 -->
+    <div class="card">
+      <div class="card-preview moderne">MODERNE</div>
+      <div class="card-body">
+        <div class="card-tag blue">Thème 2 · Professionnel</div>
+        <div class="card-title">Moderne — Bleu & Blanc</div>
+        <p class="card-desc">Design propre et intuitif pour agences classiques. Interface claire avec galerie véhicules et formulaire de réservation.</p>
+        <div class="card-colors">
+          <div class="color-dot" style="background:#1E3A8A" title="Bleu foncé"></div>
+          <div class="color-dot" style="background:#2563EB" title="Bleu moyen"></div>
+          <div class="color-dot" style="background:#3B82F6" title="Bleu clair"></div>
+          <div class="color-dot" style="background:#FFFFFF;border-color:#334155" title="Blanc"></div>
+        </div>
+        <p class="card-price">Tarif recommandé : <strong>2 000 – 3 000 MAD</strong></p>
+        <a href="theme2-moderne/index.html" class="card-link blue-link">Voir le thème Moderne →</a>
+      </div>
+    </div>
+
+    <!-- THEME 3 -->
+    <div class="card">
+      <div class="card-preview dynamique">DYNAMIQUE</div>
+      <div class="card-body">
+        <div class="card-tag red">Thème 3 · Populaire</div>
+        <div class="card-title">Dynamique — Rouge & Gris</div>
+        <p class="card-desc">Style énergique et commercial pour agences accessibles. Fort impact visuel, animations agressives, galerie véhicules complète.</p>
+        <div class="card-colors">
+          <div class="color-dot" style="background:#DC2626" title="Rouge vif"></div>
+          <div class="color-dot" style="background:#111827" title="Gris foncé"></div>
+          <div class="color-dot" style="background:#374151" title="Gris moyen"></div>
+          <div class="color-dot" style="background:#9CA3AF" title="Gris clair"></div>
+        </div>
+        <p class="card-price">Tarif recommandé : <strong>1 000 – 2 000 MAD</strong></p>
+        <a href="theme3-dynamique/index.html" class="card-link red-link">Voir le thème Dynamique →</a>
+      </div>
+    </div>
+
+    <!-- THEME 4 -->
+    <div class="card">
+      <div class="card-preview oasis">OASIS</div>
+      <div class="card-body">
+        <div class="card-tag teal">Thème 4 · Moderne</div>
+        <div class="card-title">Oasis — Turquoise & Blanc</div>
+        <p class="card-desc">Design frais et élégant avec des tons turquoise. Cartes arrondies, typographie douce, ambiance moderne et chaleureuse.</p>
+        <div class="card-colors">
+          <div class="color-dot" style="background:#0D9488" title="Teal foncé"></div>
+          <div class="color-dot" style="background:#14B8A6" title="Teal moyen"></div>
+          <div class="color-dot" style="background:#2DD4BF" title="Teal clair"></div>
+          <div class="color-dot" style="background:#F0FDFA" title="Blanc teal"></div>
+        </div>
+        <p class="card-price">Tarif recommandé : <strong>2 000 – 3 000 MAD</strong></p>
+        <a href="theme4-oasis/index.html" class="card-link teal-link">Voir le thème Oasis →</a>
+      </div>
+    </div>
+
+    <!-- THEME 5 -->
+    <div class="card">
+      <div class="card-preview galaxy">GALAXY</div>
+      <div class="card-body">
+        <div class="card-tag purple">Thème 5 · Tech Premium</div>
+        <div class="card-title">Galaxy — Violet & Or</div>
+        <p class="card-desc">Thème ultra-moderne sombre avec effets néon violets et accents dorés. Pour les agences jeunes et ambitieuses qui veulent se démarquer.</p>
+        <div class="card-colors">
+          <div class="color-dot" style="background:#7C3AED" title="Violet"></div>
+          <div class="color-dot" style="background:#5B21B6" title="Violet foncé"></div>
+          <div class="color-dot" style="background:#A78BFA" title="Violet clair"></div>
+          <div class="color-dot" style="background:#D97706" title="Or"></div>
+        </div>
+        <p class="card-price">Tarif recommandé : <strong>2 500 – 3 500 MAD</strong></p>
+        <a href="theme5-galaxy/index.html" class="card-link purple-link">Voir le thème Galaxy →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>© 2025 Elite Cars Marrakech — Démos créées pour présentation aux agences de location à Marrakech</footer>
+</body>
+</html>

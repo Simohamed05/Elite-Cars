@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elite Cars Marrakech — Location Voiture Premium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    :root{
+      --pur:#7C3AED; --pur-d:#5B21B6; --pur-l:#8B5CF6; --pur-ll:#A78BFA; --pur-pale:rgba(124,58,237,.08);
+      --gold:#D97706; --gold-l:#F59E0B; --gold-ll:#FCD34D;
+      --dark:#08051A; --d2:#0E0A26; --d3:#14103A; --d4:#1C1650;
+      --text:rgba(255,255,255,.88); --muted:rgba(255,255,255,.4); --white:#fff;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--dark);color:var(--text);font-family:'Space Grotesk',sans-serif;overflow-x:hidden;}
+
+    /* LOADER */
+    #loader{position:fixed;inset:0;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .7s ease,visibility .7s ease;}
+    #loader.hidden{opacity:0;visibility:hidden;}
+    .l-hex{width:64px;height:64px;position:relative;margin-bottom:28px;}
+    .l-hex svg{width:100%;height:100%;animation:lhexSpin 1.5s linear infinite;}
+    @keyframes lhexSpin{to{transform:rotate(360deg)}}
+    .l-brand{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:white;letter-spacing:2px;}
+    .l-brand span{background:linear-gradient(90deg,var(--pur-ll),var(--gold-ll));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .l-sub{font-size:.62rem;letter-spacing:6px;text-transform:uppercase;color:var(--muted);margin-top:8px;}
+
+    /* NAV */
+    nav{position:fixed;top:0;width:100%;z-index:1000;height:70px;background:rgba(8,5,26,.85);backdrop-filter:blur(20px);display:flex;align-items:center;padding:0 64px;justify-content:space-between;border-bottom:1px solid rgba(124,58,237,.2);}
+    .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:white;text-decoration:none;letter-spacing:1px;}
+    .nav-logo span{background:linear-gradient(90deg,var(--pur-ll),var(--gold-ll));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .nav-links{display:flex;gap:30px;list-style:none;}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:500;letter-spacing:.5px;transition:color .25s;}
+    .nav-links a:hover{color:var(--pur-ll);}
+    .nav-btn{background:linear-gradient(135deg,var(--pur),var(--pur-d));color:white;padding:10px 22px;font-weight:700;font-size:.78rem;text-decoration:none;border-radius:8px;transition:all .3s;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(124,58,237,.4);}
+    .nav-btn:hover{box-shadow:0 8px 32px rgba(124,58,237,.6);transform:translateY(-2px);}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+    .hamburger span{width:24px;height:2px;background:var(--pur-ll);border-radius:2px;}
+
+    /* HERO */
+    #hero{padding-top:70px;min-height:100vh;background:var(--dark);position:relative;overflow:hidden;display:flex;align-items:center;}
+    #heroCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+    .hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(124,58,237,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,.06) 1px,transparent 1px);background-size:60px 60px;}
+    .hero-glow{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.25),transparent 70%);top:50%;left:55%;transform:translate(-50%,-50%);pointer-events:none;}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,5,26,.98) 40%,rgba(8,5,26,.65) 70%,rgba(8,5,26,.1) 100%);}
+    .hero-content{position:relative;z-index:4;padding:60px 64px 60px 72px;max-width:640px;}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,58,237,.15);border:1px solid rgba(139,92,246,.4);color:var(--pur-ll);padding:8px 18px;font-size:.7rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;border-radius:6px;margin-bottom:28px;}
+    .hero-h1{font-family:'Syne',sans-serif;font-size:clamp(3rem,6.5vw,5.5rem);font-weight:800;color:white;line-height:1.0;margin-bottom:20px;}
+    .hero-h1 .grad{background:linear-gradient(135deg,var(--pur-ll) 0%,var(--gold-ll) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hero-desc{color:var(--muted);font-size:.95rem;line-height:1.9;margin-bottom:38px;max-width:460px;font-weight:400;}
+    .hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:52px;}
+    .btn-pur{background:linear-gradient(135deg,var(--pur),var(--pur-d));color:white;padding:16px 38px;font-weight:700;font-size:.84rem;letter-spacing:1px;text-decoration:none;border-radius:8px;transition:all .3s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 8px 30px rgba(124,58,237,.45);}
+    .btn-pur:hover{box-shadow:0 14px 44px rgba(124,58,237,.65);transform:translateY(-3px);}
+    .btn-gold{background:linear-gradient(135deg,var(--gold),#B45309);color:white;padding:16px 38px;font-weight:700;font-size:.84rem;text-decoration:none;border-radius:8px;transition:all .3s;display:inline-flex;align-items:center;gap:8px;}
+    .btn-gold:hover{box-shadow:0 10px 32px rgba(217,119,6,.45);transform:translateY(-3px);}
+    .hero-stats{display:flex;gap:0;border:1px solid rgba(124,58,237,.2);border-radius:12px;overflow:hidden;background:rgba(124,58,237,.06);backdrop-filter:blur(10px);}
+    .stat-item{padding:18px 24px;text-align:center;border-right:1px solid rgba(124,58,237,.15);}
+    .stat-item:last-child{border-right:none;}
+    .stat-num{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,var(--pur-ll),var(--gold-ll));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .stat-lbl{font-size:.6rem;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-top:3px;}
+
+    /* SECTIONS */
+    section{padding:88px 64px;}
+    .s-tag{display:inline-block;background:rgba(124,58,237,.12);color:var(--pur-ll);padding:6px 16px;font-size:.65rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;border-radius:6px;margin-bottom:14px;border:1px solid rgba(139,92,246,.25);}
+    .s-title{font-family:'Syne',sans-serif;font-size:clamp(1.9rem,3.5vw,2.8rem);font-weight:800;color:white;margin-bottom:10px;}
+    .s-title .grad{background:linear-gradient(135deg,var(--pur-ll),var(--gold-ll));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .s-sub{color:var(--muted);font-size:.9rem;line-height:1.8;margin-bottom:48px;}
+    .center{text-align:center;}
+    .center .s-sub{max-width:500px;margin:0 auto 48px;}
+
+    /* FLEET */
+    #fleet{background:var(--d2);}
+    .fleet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;}
+    .car-card{background:var(--d3);border:1px solid rgba(124,58,237,.15);border-radius:16px;overflow:hidden;transition:all .35s;}
+    .car-card:hover{border-color:rgba(139,92,246,.5);transform:translateY(-6px);box-shadow:0 20px 60px rgba(124,58,237,.25);}
+    .car-img-wrap{position:relative;overflow:hidden;height:200px;}
+    .car-img{width:100%;height:100%;object-fit:cover;transition:transform .45s;filter:brightness(.9);}
+    .car-card:hover .car-img{transform:scale(1.06);filter:brightness(1);}
+    .car-ribbon{position:absolute;top:12px;left:12px;background:linear-gradient(135deg,var(--pur),var(--pur-d));color:white;padding:5px 14px;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-radius:20px;}
+    .car-ribbon.gold{background:linear-gradient(135deg,var(--gold),#92400E);}
+    .car-body{padding:20px 22px 22px;}
+    .car-cat{font-size:.64rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--pur-ll);margin-bottom:6px;}
+    .car-name{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;color:white;margin-bottom:12px;}
+    .car-specs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:16px;}
+    .spec{display:flex;align-items:center;gap:6px;font-size:.76rem;color:var(--muted);font-weight:500;}
+    .spec i{color:var(--pur-l);font-size:.68rem;width:12px;}
+    .car-foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(124,58,237,.12);padding-top:14px;}
+    .car-price strong{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;background:linear-gradient(135deg,var(--pur-ll),var(--gold-ll));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .car-price small{font-size:.65rem;color:var(--muted);display:block;font-weight:600;text-transform:uppercase;letter-spacing:1px;}
+    .car-btn{background:linear-gradient(135deg,var(--pur),var(--pur-d));color:white;padding:9px 18px;font-weight:700;font-size:.74rem;text-decoration:none;text-transform:uppercase;letter-spacing:1px;transition:all .25s;border-radius:8px;}
+    .car-btn:hover{box-shadow:0 6px 20px rgba(124,58,237,.45);}
+
+    /* VIEWER */
+    #viewer{background:var(--dark);}
+    .viewer-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+    .viewer-left h2{color:white;margin-bottom:14px;}
+    .viewer-left p{color:var(--muted);line-height:1.8;font-size:.9rem;margin-bottom:28px;}
+    #viewerCanvas{width:100%;height:420px;display:block;cursor:grab;border-radius:12px;border:1px solid rgba(124,58,237,.25);box-shadow:0 0 40px rgba(124,58,237,.2);}
+    #viewerCanvas:active{cursor:grabbing;}
+    .color-label{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:10px;}
+    .color-btns{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:24px;}
+    .color-btn{width:32px;height:32px;border-radius:8px;border:2px solid transparent;cursor:pointer;transition:all .25s;}
+    .color-btn.active,.color-btn:hover{border-color:var(--pur-ll);transform:scale(1.18);box-shadow:0 0 12px rgba(167,139,250,.5);}
+    .viewer-hint{font-size:.74rem;color:var(--muted);display:flex;align-items:center;gap:8px;}
+    .viewer-hint i{color:var(--pur-ll);}
+
+    /* SERVICES */
+    #services{background:var(--d2);}
+    .svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;}
+    .svc-card{background:var(--d3);padding:36px 28px;border-radius:16px;border:1px solid rgba(124,58,237,.12);transition:all .35s;}
+    .svc-card:hover{border-color:rgba(139,92,246,.4);box-shadow:0 12px 40px rgba(124,58,237,.2);transform:translateY(-4px);}
+    .svc-icon{width:56px;height:56px;background:rgba(124,58,237,.12);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--pur-ll);margin-bottom:18px;border:1px solid rgba(139,92,246,.2);}
+    .svc-card:hover .svc-icon{background:linear-gradient(135deg,var(--pur),var(--pur-d));border-color:transparent;box-shadow:0 6px 20px rgba(124,58,237,.4);}
+    .svc-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:white;margin-bottom:10px;}
+    .svc-desc{font-size:.82rem;color:var(--muted);line-height:1.75;}
+
+    /* RESERVATION */
+    #reservation{background:var(--dark);}
+    .res-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:80px;align-items:start;}
+    .res-left p{color:var(--muted);line-height:1.85;font-size:.9rem;margin-bottom:28px;}
+    .res-perks{list-style:none;display:flex;flex-direction:column;gap:13px;margin-bottom:32px;}
+    .res-perks li{display:flex;align-items:center;gap:12px;font-size:.87rem;color:var(--text);font-weight:500;}
+    .res-perks li i{color:var(--pur-ll);background:rgba(124,58,237,.12);width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:.7rem;border:1px solid rgba(139,92,246,.2);}
+    .wa-link{display:inline-flex;align-items:center;gap:12px;background:#25D366;color:white;padding:15px 28px;font-weight:700;font-size:.84rem;text-decoration:none;text-transform:uppercase;letter-spacing:1px;border-radius:8px;transition:all .3s;box-shadow:0 6px 24px rgba(37,211,102,.35);}
+    .wa-link:hover{background:#128C7E;transform:translateY(-2px);}
+    .res-form-wrap{background:var(--d2);padding:40px;border-radius:20px;border:1px solid rgba(124,58,237,.2);box-shadow:0 8px 48px rgba(124,58,237,.15);}
+    .rfh{border-left:3px solid var(--pur-ll);padding-left:16px;margin-bottom:26px;}
+    .rfh h3{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;color:white;}
+    .rfh p{font-size:.78rem;color:var(--muted);margin-top:4px;}
+    .fg{margin-bottom:14px;}
+    .fg label{display:block;font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:7px;}
+    .fg input,.fg select{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(124,58,237,.2);padding:12px 14px;font-family:'Space Grotesk',sans-serif;font-size:.88rem;color:white;outline:none;transition:border-color .25s;border-radius:8px;}
+    .fg input:focus,.fg select:focus{border-color:var(--pur-ll);background:rgba(124,58,237,.05);}
+    .fg select option{background:var(--d2);color:white;}
+    .fg input::placeholder{color:rgba(255,255,255,.2);}
+    .f-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .f-submit{width:100%;background:linear-gradient(135deg,var(--pur),var(--pur-d));color:white;border:none;padding:16px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.88rem;text-transform:uppercase;letter-spacing:2px;cursor:pointer;transition:all .3s;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:10px;border-radius:8px;box-shadow:0 6px 24px rgba(124,58,237,.4);}
+    .f-submit:hover{box-shadow:0 12px 36px rgba(124,58,237,.6);transform:translateY(-2px);}
+
+    /* TESTIMONIALS */
+    #testimonials{background:var(--d2);}
+    .testi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;}
+    .testi-card{background:var(--d3);padding:32px;border-radius:16px;border:1px solid rgba(124,58,237,.12);transition:all .35s;}
+    .testi-card:hover{border-color:rgba(139,92,246,.35);box-shadow:0 12px 40px rgba(124,58,237,.18);transform:translateY(-4px);}
+    .testi-stars{background:linear-gradient(90deg,var(--gold-ll),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:.85rem;margin-bottom:14px;letter-spacing:3px;}
+    .testi-txt{font-size:.87rem;color:var(--muted);line-height:1.9;margin-bottom:20px;}
+    .testi-author{display:flex;align-items:center;gap:12px;}
+    .testi-avatar{width:44px;height:44px;border-radius:10px;object-fit:cover;border:2px solid rgba(139,92,246,.4);}
+    .testi-name{font-weight:700;font-size:.87rem;color:white;}
+    .testi-from{font-size:.72rem;color:var(--muted);}
+
+    /* CTA */
+    .cta-strip{background:linear-gradient(135deg,var(--pur-d),var(--pur),#6D28D9);padding:60px 64px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px;position:relative;overflow:hidden;}
+    .cta-strip::before{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:rgba(255,255,255,.04);top:-100px;right:-100px;}
+    .cta-strip h2{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:white;position:relative;}
+    .cta-strip p{color:rgba(255,255,255,.7);font-size:.9rem;margin-top:6px;position:relative;}
+    .cta-btns{display:flex;gap:12px;flex-wrap:wrap;position:relative;}
+    .cta-btn-w{background:white;color:var(--pur-d);padding:14px 32px;font-weight:700;font-size:.84rem;text-decoration:none;text-transform:uppercase;letter-spacing:1px;border-radius:8px;transition:all .3s;}
+    .cta-btn-w:hover{background:var(--pur-pale);transform:translateY(-2px);}
+    .cta-btn-o{background:transparent;color:white;padding:14px 32px;font-weight:600;font-size:.84rem;text-decoration:none;text-transform:uppercase;letter-spacing:1px;border:1.5px solid rgba(255,255,255,.4);border-radius:8px;transition:all .3s;}
+    .cta-btn-o:hover{border-color:white;}
+
+    /* FOOTER */
+    footer{background:#040312;padding:64px 64px 30px;border-top:1px solid rgba(124,58,237,.15);}
+    .fg-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;}
+    .fl{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:white;margin-bottom:12px;}
+    .fl span{background:linear-gradient(90deg,var(--pur-ll),var(--gold-ll));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .fd{font-size:.82rem;color:var(--muted);line-height:1.85;max-width:280px;margin-bottom:18px;}
+    .fs{display:flex;gap:8px;}
+    .fs-a{width:36px;height:36px;background:rgba(124,58,237,.08);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:all .25s;font-size:.82rem;border-radius:8px;border:1px solid rgba(124,58,237,.15);}
+    .fs-a:hover{background:var(--pur);color:white;border-color:var(--pur);}
+    .fc h4{font-family:'Syne',sans-serif;color:white;font-weight:700;font-size:.88rem;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(124,58,237,.2);}
+    .fc ul{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:6px;}
+    .fc ul li a{color:var(--muted);text-decoration:none;font-size:.82rem;transition:color .25s;font-weight:400;}
+    .fc ul li a:hover{color:var(--pur-ll);}
+    .fci{display:flex;gap:10px;color:var(--muted);font-size:.82rem;margin-bottom:11px;line-height:1.6;align-items:flex-start;}
+    .fci i{color:var(--pur-ll);width:14px;flex-shrink:0;margin-top:2px;}
+    .f-bottom{border-top:1px solid rgba(255,255,255,.05);padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+    .f-copy{font-size:.74rem;color:rgba(255,255,255,.18);}
+
+    /* WA FLOAT */
+    .wa-float{position:fixed;bottom:24px;right:24px;z-index:999;width:62px;height:62px;background:#25D366;border-radius:16px;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 6px 24px rgba(37,211,102,.4);animation:waBounce 3s ease-in-out infinite;}
+    .wa-float:hover{transform:scale(1.12);animation:none;}
+    .wa-float i{color:white;font-size:1.6rem;}
+    .wa-badge{position:absolute;top:-5px;right:-5px;width:20px;height:20px;background:var(--pur);border-radius:6px;display:flex;align-items:center;justify-content:center;color:white;font-size:.58rem;font-weight:700;border:2px solid var(--dark);}
+    @keyframes waBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+    /* REVEAL */
+    .rv{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease;}
+    .rv.on{opacity:1;transform:translateY(0);}
+    .rv-l{opacity:0;transform:translateX(-28px);transition:opacity .6s ease,transform .6s ease;}
+    .rv-l.on{opacity:1;transform:translateX(0);}
+    .d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
+
+    /* GALLERY */
+    .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;grid-auto-rows:240px;}
+    .gallery-item{position:relative;overflow:hidden;border-radius:12px;cursor:pointer;border:1px solid rgba(124,58,237,.15);}
+    .gallery-item.wide{grid-column:span 2;}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s;filter:brightness(.85);}
+    .gallery-item:hover img{transform:scale(1.08);filter:brightness(1);}
+    .gallery-overlay{position:absolute;bottom:0;left:0;right:0;padding:22px 18px;background:linear-gradient(to top,rgba(8,5,26,.9),transparent);transform:translateY(8px);opacity:0;transition:all .35s;}
+    .gallery-item:hover .gallery-overlay{transform:translateY(0);opacity:1;}
+    .gallery-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;color:white;}
+    .gallery-cat{font-size:.7rem;color:rgba(255,255,255,.6);margin-top:3px;text-transform:uppercase;letter-spacing:1.5px;}
+    .gallery-badge{position:absolute;top:12px;left:12px;background:linear-gradient(135deg,var(--pur),var(--pur-d));color:white;padding:4px 12px;border-radius:8px;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+
+    @media(max-width:1024px){
+      nav{padding:0 20px;}
+      .nav-links{display:none;}
+      .hamburger{display:flex;}
+      section{padding:60px 20px;}
+      .hero-content{padding:60px 20px;}
+      #heroCanvas{opacity:.2;}
+      .res-grid{grid-template-columns:1fr;gap:36px;}
+      .gallery-grid{grid-template-columns:1fr 1fr;grid-auto-rows:180px;}
+      .gallery-item.wide{grid-column:span 2;}
+      .fg-grid{grid-template-columns:1fr 1fr;gap:28px;}
+      .cta-strip{flex-direction:column;padding:40px 20px;}
+    }
+    @media(max-width:600px){
+      .f-row{grid-template-columns:1fr;}
+      .fg-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="l-hex">
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="32,2 58,17 58,47 32,62 6,47 6,17" stroke="url(#lg)" stroke-width="2" fill="none"/>
+      <polygon points="32,12 50,22 50,42 32,52 14,42 14,22" stroke="rgba(124,58,237,.3)" stroke-width="1" fill="none"/>
+      <circle cx="32" cy="32" r="6" fill="url(#lg)"/>
+      <defs>
+        <linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#A78BFA"/>
+          <stop offset="100%" stop-color="#FCD34D"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+  <div class="l-brand">Elite<span>Cars</span></div>
+  <div class="l-sub">Marrakech · Maroc</div>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#hero" class="nav-logo">Elite<span>Cars</span></a>
+  <ul class="nav-links">
+    <li><a href="#fleet">Flotte</a></li>
+    <li><a href="#viewer">Galerie</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#reservation">Réserver</a></li>
+  </ul>
+  <a href="https://wa.me/212600000000" class="nav-btn"><i class="fab fa-whatsapp"></i> Réserver</a>
+  <div class="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge rv"><i class="fas fa-bolt"></i> Réservation Instantanée · WhatsApp</div>
+    <h1 class="hero-h1 rv d1">Location<br/>Voiture<br/><span class="grad">Marrakech</span></h1>
+    <p class="hero-desc rv d2">Le futur de la location à Marrakech. Réservez en 2 minutes, livraison partout dans la ville. Dès 200 MAD/jour.</p>
+    <div class="hero-btns rv d3">
+      <a href="#reservation" class="btn-pur"><i class="fas fa-car"></i> Réserver Maintenant</a>
+      <a href="https://wa.me/212600000000" class="btn-gold"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+    </div>
+    <div class="hero-stats rv d4">
+      <div class="stat-item"><div class="stat-num">200</div><div class="stat-lbl">MAD/Jour</div></div>
+      <div class="stat-item"><div class="stat-num">100+</div><div class="stat-lbl">Voitures</div></div>
+      <div class="stat-item"><div class="stat-num">5K+</div><div class="stat-lbl">Clients</div></div>
+      <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-lbl">Dispo</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FLEET -->
+<section id="fleet">
+  <div class="rv center">
+    <div class="s-tag">Notre Flotte</div>
+    <h2 class="s-title">Choisissez votre <span class="grad">voiture</span></h2>
+    <p class="s-sub">Du véhicule économique au SUV de prestige — la voiture parfaite pour Marrakech.</p>
+  </div>
+  <div class="fleet-grid">
+    <div class="car-card rv">
+      <div class="car-img-wrap"><img class="car-img" src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=600&q=80&fit=crop" alt="Logan"/><div class="car-ribbon gold">Meilleure Vente</div></div>
+      <div class="car-body"><div class="car-cat">Économique</div><div class="car-name">Dacia Logan</div><div class="car-specs"><span class="spec"><i class="fas fa-cog"></i>Manuelle</span><span class="spec"><i class="fas fa-users"></i>5 places</span><span class="spec"><i class="fas fa-gas-pump"></i>Diesel</span><span class="spec"><i class="fas fa-road"></i>Km illimité</span></div><div class="car-foot"><div class="car-price"><small>À partir de</small><strong>200 MAD</strong><small>par jour</small></div><a href="#reservation" class="car-btn">Réserver</a></div></div>
+    </div>
+    <div class="car-card rv d1">
+      <div class="car-img-wrap"><img class="car-img" src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=600&q=80&fit=crop" alt="Clio"/><div class="car-ribbon">Populaire</div></div>
+      <div class="car-body"><div class="car-cat">Économique</div><div class="car-name">Renault Clio</div><div class="car-specs"><span class="spec"><i class="fas fa-cog"></i>Manuelle</span><span class="spec"><i class="fas fa-users"></i>5 places</span><span class="spec"><i class="fas fa-gas-pump"></i>Essence</span><span class="spec"><i class="fas fa-snowflake"></i>Climatisé</span></div><div class="car-foot"><div class="car-price"><small>À partir de</small><strong>250 MAD</strong><small>par jour</small></div><a href="#reservation" class="car-btn">Réserver</a></div></div>
+    </div>
+    <div class="car-card rv d2">
+      <div class="car-img-wrap"><img class="car-img" src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80&fit=crop" alt="Duster"/><div class="car-ribbon">SUV 4×4</div></div>
+      <div class="car-body"><div class="car-cat">SUV Familial</div><div class="car-name">Dacia Duster</div><div class="car-specs"><span class="spec"><i class="fas fa-mountain"></i>4×4</span><span class="spec"><i class="fas fa-users"></i>5 places</span><span class="spec"><i class="fas fa-gas-pump"></i>Diesel</span><span class="spec"><i class="fas fa-snowflake"></i>Climatisé</span></div><div class="car-foot"><div class="car-price"><small>À partir de</small><strong>400 MAD</strong><small>par jour</small></div><a href="#reservation" class="car-btn">Réserver</a></div></div>
+    </div>
+    <div class="car-card rv">
+      <div class="car-img-wrap"><img class="car-img" src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&q=80&fit=crop" alt="Mercedes"/><div class="car-ribbon gold">Luxe</div></div>
+      <div class="car-body"><div class="car-cat">Luxe & Prestige</div><div class="car-name">Mercedes Classe E</div><div class="car-specs"><span class="spec"><i class="fas fa-cog"></i>Automatique</span><span class="spec"><i class="fas fa-users"></i>5 places</span><span class="spec"><i class="fas fa-gas-pump"></i>Diesel</span><span class="spec"><i class="fas fa-wifi"></i>GPS</span></div><div class="car-foot"><div class="car-price"><small>À partir de</small><strong>800 MAD</strong><small>par jour</small></div><a href="#reservation" class="car-btn">Réserver</a></div></div>
+    </div>
+    <div class="car-card rv d1">
+      <div class="car-img-wrap"><img class="car-img" src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&q=80&fit=crop" alt="BMW"/><div class="car-ribbon">Premium</div></div>
+      <div class="car-body"><div class="car-cat">Luxe & Prestige</div><div class="car-name">BMW Série 3</div><div class="car-specs"><span class="spec"><i class="fas fa-cog"></i>Automatique</span><span class="spec"><i class="fas fa-users"></i>5 places</span><span class="spec"><i class="fas fa-gas-pump"></i>Essence</span><span class="spec"><i class="fas fa-star"></i>Premium</span></div><div class="car-foot"><div class="car-price"><small>À partir de</small><strong>700 MAD</strong><small>par jour</small></div><a href="#reservation" class="car-btn">Réserver</a></div></div>
+    </div>
+    <div class="car-card rv d2">
+      <div class="car-img-wrap"><img class="car-img" src="https://images.unsplash.com/photo-1606664515524-ed1b8e21ee1a?w=600&q=80&fit=crop" alt="Lodgy"/><div class="car-ribbon">Familial</div></div>
+      <div class="car-body"><div class="car-cat">Familial 7 Places</div><div class="car-name">Dacia Lodgy 7P</div><div class="car-specs"><span class="spec"><i class="fas fa-cog"></i>Manuelle</span><span class="spec"><i class="fas fa-users"></i>7 places</span><span class="spec"><i class="fas fa-gas-pump"></i>Diesel</span><span class="spec"><i class="fas fa-suitcase"></i>Grand coffre</span></div><div class="car-foot"><div class="car-price"><small>À partir de</small><strong>350 MAD</strong><small>par jour</small></div><a href="#reservation" class="car-btn">Réserver</a></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERIE VÉHICULES -->
+<section id="viewer" style="background:var(--d2);">
+  <div class="center rv">
+    <div class="s-tag">Photos Réelles</div>
+    <h2 class="s-title">Nos Véhicules <span class="grad">en Images</span></h2>
+    <p class="s-sub">Découvrez notre flotte de véhicules premium disponibles pour votre location à Marrakech.</p>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item wide rv">
+      <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=900&q=85&fit=crop" alt="Mercedes Classe E"/>
+      <div class="gallery-badge">Luxe</div>
+      <div class="gallery-overlay"><div class="gallery-name">Mercedes Classe E</div><div class="gallery-cat">Luxe & Prestige</div></div>
+    </div>
+    <div class="gallery-item rv d1">
+      <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&q=85&fit=crop" alt="BMW Série 3"/>
+      <div class="gallery-overlay"><div class="gallery-name">BMW Série 3</div><div class="gallery-cat">Luxe & Prestige</div></div>
+    </div>
+    <div class="gallery-item rv">
+      <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&q=85&fit=crop" alt="Coupé Sport"/>
+      <div class="gallery-badge">Premium</div>
+      <div class="gallery-overlay"><div class="gallery-name">Coupé Sport</div><div class="gallery-cat">Sport & Performance</div></div>
+    </div>
+    <div class="gallery-item rv d1">
+      <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=85&fit=crop" alt="SUV 4x4"/>
+      <div class="gallery-overlay"><div class="gallery-name">SUV 4×4</div><div class="gallery-cat">Aventure & Famille</div></div>
+    </div>
+    <div class="gallery-item wide rv d2">
+      <img src="https://images.unsplash.com/photo-1580274455191-1c62238fa333?w=900&q=85&fit=crop" alt="Voiture Prestige"/>
+      <div class="gallery-badge">Prestige</div>
+      <div class="gallery-overlay"><div class="gallery-name">SUV Prestige</div><div class="gallery-cat">Luxe & Performance</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="center rv">
+    <div class="s-tag">Nos Avantages</div>
+    <h2 class="s-title">Pourquoi nous <span class="grad">choisir</span> ?</h2>
+    <p class="s-sub">Service next-gen, véhicules premium. On redéfinit la location à Marrakech.</p>
+  </div>
+  <div class="svc-grid">
+    <div class="svc-card rv"><div class="svc-icon"><i class="fas fa-plane-arrival"></i></div><div class="svc-title">Livraison Aéroport</div><p class="svc-desc">Notre équipe vous attend à l'aéroport Marrakech-Menara. Prise en charge immédiate, zéro attente.</p></div>
+    <div class="svc-card rv d1"><div class="svc-icon"><i class="fas fa-shield-alt"></i></div><div class="svc-title">Assurance Complète</div><p class="svc-desc">Tous les véhicules sont couverts tous risques. Conduisez l'esprit tranquille.</p></div>
+    <div class="svc-card rv d2"><div class="svc-icon"><i class="fas fa-road"></i></div><div class="svc-title">Km Illimité</div><p class="svc-desc">Explorez le Maroc sans limites. Zéro frais supplémentaire, zéro mauvaise surprise.</p></div>
+    <div class="svc-card rv d3"><div class="svc-icon"><i class="fab fa-whatsapp"></i></div><div class="svc-title">WhatsApp 24/7</div><p class="svc-desc">Réservez en quelques secondes via WhatsApp. Réponse garantie en moins de 30 minutes.</p></div>
+    <div class="svc-card rv"><div class="svc-icon"><i class="fas fa-map-marked-alt"></i></div><div class="svc-title">GPS Offert</div><p class="svc-desc">Navigation GPS incluse dans tous les véhicules. Marrakech et tout le Maroc à portée.</p></div>
+    <div class="svc-card rv d1"><div class="svc-icon"><i class="fas fa-bolt"></i></div><div class="svc-title">Réservation Express</div><p class="svc-desc">Formulaire rapide, confirmation immédiate. Votre voiture est prête quand vous arrivez.</p></div>
+  </div>
+</section>
+
+<!-- RESERVATION -->
+<section id="reservation">
+  <div class="res-grid">
+    <div class="rv-l">
+      <div class="s-tag">Réserver</div>
+      <h2 class="s-title" style="margin-top:12px">Réservez<br/><span class="grad">maintenant !</span></h2>
+      <p>Simple, rapide, fiable. Remplissez le formulaire et on vous rappelle dans les 30 minutes.</p>
+      <ul class="res-perks">
+        <li><i class="fas fa-check"></i>Confirmation en 30 minutes</li>
+        <li><i class="fas fa-check"></i>Livraison aéroport ou hôtel</li>
+        <li><i class="fas fa-check"></i>Paiement à la livraison</li>
+        <li><i class="fas fa-check"></i>Annulation gratuite</li>
+        <li><i class="fas fa-check"></i>Papiers fournis sur place</li>
+      </ul>
+      <a href="https://wa.me/212600000000?text=Bonjour, je veux réserver." class="wa-link" target="_blank">
+        <i class="fab fa-whatsapp" style="font-size:1.3rem"></i> Réserver sur WhatsApp
+      </a>
+    </div>
+    <div class="res-form-wrap rv">
+      <div class="rfh"><h3>Formulaire de Réservation</h3><p>Réponse sous 30 minutes garantie</p></div>
+      <form onsubmit="submitForm(event)">
+        <div class="f-row">
+          <div class="fg"><label>Prénom</label><input type="text" placeholder="Mohammed" required/></div>
+          <div class="fg"><label>Nom</label><input type="text" placeholder="Alami" required/></div>
+        </div>
+        <div class="fg"><label>Téléphone / WhatsApp</label><input type="tel" placeholder="+212 6XX XXX XXX" required/></div>
+        <div class="f-row">
+          <div class="fg"><label>Date départ</label><input type="date" required/></div>
+          <div class="fg"><label>Date retour</label><input type="date" required/></div>
+        </div>
+        <div class="fg"><label>Véhicule</label>
+          <select required><option value="">Choisir...</option><option>Dacia Logan — 200 MAD/j</option><option>Renault Clio — 250 MAD/j</option><option>Dacia Duster 4×4 — 400 MAD/j</option><option>Dacia Lodgy 7P — 350 MAD/j</option><option>BMW Série 3 — 700 MAD/j</option><option>Mercedes Classe E — 800 MAD/j</option></select>
+        </div>
+        <div class="fg"><label>Lieu de prise en charge</label>
+          <select><option>Aéroport Marrakech-Menara</option><option>Centre-ville Marrakech</option><option>Mon hôtel / riad</option><option>Agence Elite Cars</option></select>
+        </div>
+        <button type="submit" class="f-submit"><i class="fas fa-bolt"></i> Envoyer la Demande</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="center rv">
+    <div class="s-tag">Avis Clients</div>
+    <h2 class="s-title">Ils nous font <span class="grad">confiance</span></h2>
+    <p class="s-sub">Plus de 5 000 clients satisfaits à travers le monde.</p>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card rv"><div class="testi-stars">★★★★★</div><p class="testi-txt">"Super agence ! Prix imbattables, service ultra-rapide. La voiture était propre et en parfait état. Je reviendrai assurément !"</p><div class="testi-author"><img class="testi-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80&fit=crop" alt=""/><div><div class="testi-name">Karim Benali</div><div class="testi-from">Casablanca, Maroc</div></div></div></div>
+    <div class="testi-card rv d1"><div class="testi-stars">★★★★★</div><p class="testi-txt">"Amazing service! WhatsApp booking took 2 minutes, car was at the airport as promised. Modern vehicles, fair prices. 100% recommend!"</p><div class="testi-author"><img class="testi-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80&fit=crop" alt=""/><div><div class="testi-name">Laura Schmidt</div><div class="testi-from">Berlin, Allemagne</div></div></div></div>
+    <div class="testi-card rv d2"><div class="testi-stars">★★★★★</div><p class="testi-txt">"تجربة استثنائية! الحجز عبر واتساب في دقيقتين، السيارة نظيفة وحديثة، الفريق محترف ومتجاوب. أنصح به بشدة."</p><div class="testi-author"><img class="testi-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80&fit=crop" alt=""/><div><div class="testi-name">Youssef Mansouri</div><div class="testi-from">Marrakech, Maroc</div></div></div></div>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<div class="cta-strip">
+  <div><h2>Prêt à réserver votre voiture ?</h2><p>Réponse en 30 min · Livraison partout à Marrakech · Paiement à la livraison</p></div>
+  <div class="cta-btns">
+    <a href="#reservation" class="cta-btn-w">Réserver Maintenant</a>
+    <a href="https://wa.me/212600000000" class="cta-btn-o"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="fg-grid">
+    <div class="rv"><div class="fl">Elite<span>Cars</span></div><p class="fd">Location de voitures à Marrakech depuis 2014. Service premium, flotte moderne, satisfaction garantie.</p><div class="fs"><a href="#" class="fs-a"><i class="fab fa-facebook-f"></i></a><a href="#" class="fs-a"><i class="fab fa-instagram"></i></a><a href="#" class="fs-a"><i class="fab fa-whatsapp"></i></a><a href="#" class="fs-a"><i class="fab fa-tiktok"></i></a></div></div>
+    <div class="fc rv d1"><h4>Navigation</h4><ul><li><a href="#fleet">Notre Flotte</a></li><li><a href="#viewer">Visionneuse 3D</a></li><li><a href="#services">Nos Services</a></li><li><a href="#reservation">Réserver</a></li></ul></div>
+    <div class="fc rv d2"><h4>Véhicules</h4><ul><li><a href="#">Économique</a></li><li><a href="#">SUV 4×4</a></li><li><a href="#">Luxe & Prestige</a></li><li><a href="#">Familial 7 places</a></li></ul></div>
+    <div class="fc rv d3"><h4>Contact</h4><div class="fci"><i class="fas fa-map-marker-alt"></i>Avenue Mohammed V, Gueliz, Marrakech</div><div class="fci"><i class="fab fa-whatsapp"></i>+212 6XX XXX XXX</div><div class="fci"><i class="fas fa-envelope"></i>contact@elitecars.ma</div><div class="fci"><i class="fas fa-clock"></i>Ouvert 24h/7j — 365 jours/an</div></div>
+  </div>
+  <div class="f-bottom"><div class="f-copy">© 2025 Elite Cars Marrakech. Tous droits réservés.</div><div class="f-copy">Marrakech · Maroc</div></div>
+</footer>
+
+<!-- WA FLOAT -->
+<a href="https://wa.me/212600000000?text=Bonjour%20Elite%20Cars%2C%20je%20souhaite%20réserver." class="wa-float" target="_blank" rel="noopener">
+  <div class="wa-badge">1</div>
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<script>
+/* LOADER */
+window.addEventListener('load',()=>setTimeout(()=>document.getElementById('loader').classList.add('hidden'),2000));
+
+/* NAV */
+function toggleNav(){
+  const ul=document.querySelector('.nav-links');
+  if(ul.style.display==='flex'){ul.style.display='none';}
+  else{Object.assign(ul.style,{display:'flex',flexDirection:'column',position:'absolute',top:'70px',left:'0',right:'0',background:'rgba(8,5,26,.97)',padding:'20px',gap:'14px',borderTop:'1px solid rgba(124,58,237,.3)',boxShadow:'0 8px 40px rgba(124,58,237,.2)'});}
+}
+
+/* REVEAL */
+const rvObs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('on');rvObs.unobserve(x.target);}});},{threshold:.08});
+document.querySelectorAll('.rv,.rv-l').forEach(el=>rvObs.observe(el));
+
+/* FORM */
+function submitForm(e){
+  e.preventDefault();
+  const btn=e.target.querySelector('.f-submit');
+  btn.innerHTML='<i class="fas fa-check"></i> Demande Envoyée !';
+  btn.style.background='linear-gradient(135deg,#059669,#047857)';
+  setTimeout(()=>{btn.innerHTML='<i class="fas fa-bolt"></i> Envoyer la Demande';btn.style.background='';},3500);
+}
+
+/* ═══════ THREE.JS CAR BUILDER ═══════ */
+function buildCar(colors){
+  const group=new THREE.Group();const parts=[];
+  function mat(c,m=0.7,r=0.25){return new THREE.MeshStandardMaterial({color:c,metalness:m,roughness:r});}
+  function add(geo,material,px=0,py=0,pz=0,rx=0,ry=0,rz=0){
+    const m=new THREE.Mesh(geo,material);m.position.set(px,py,pz);m.rotation.set(rx,ry,rz);
+    m.castShadow=true;m.receiveShadow=true;group.add(m);return m;
+  }
+  const bm=mat(colors.body),tm=mat(colors.trim,.95,.05);
+  const gm=new THREE.MeshStandardMaterial({color:0x88CCFF,transparent:true,opacity:.42,metalness:.1,roughness:0,side:THREE.DoubleSide});
+  const dm=mat(0x111111,.1,.95);
+  const lm=new THREE.MeshStandardMaterial({color:0xFFFFCC,emissive:0xFFFF44,emissiveIntensity:.7});
+  const tlm=new THREE.MeshStandardMaterial({color:0xFF2200,emissive:0xFF0000,emissiveIntensity:.5});
+  parts.push(add(new THREE.BoxGeometry(4.4,.72,1.95),bm,0,.46,0));
+  parts.push(add(new THREE.BoxGeometry(2.5,.72,1.82),bm,-0.15,1.28,0));
+  parts.push(add(new THREE.BoxGeometry(1.5,.18,1.9),bm,1.2,.88,0,0,0,-.14));
+  parts.push(add(new THREE.BoxGeometry(1.1,.16,1.88),bm,-1.15,1.05,0,0,0,.18));
+  add(new THREE.BoxGeometry(.28,.42,1.92),mat(colors.trim,.4,.6),2.28,.37,0);
+  add(new THREE.BoxGeometry(.28,.42,1.92),mat(colors.trim,.4,.6),-2.28,.37,0);
+  add(new THREE.BoxGeometry(.06,.22,1.1),tm,2.3,.5,0);
+  [-.52,.52].forEach(z=>{add(new THREE.BoxGeometry(.07,.18,.36),lm,2.3,.62,z);add(new THREE.BoxGeometry(.07,.18,.36),tlm,-2.3,.62,z);});
+  add(new THREE.BoxGeometry(2.4,.58,.04),gm,-0.12,1.3,.925);
+  add(new THREE.BoxGeometry(2.4,.58,.04),gm,-0.12,1.3,-.925);
+  const wf=new THREE.Mesh(new THREE.BoxGeometry(.05,.64,1.78),gm);wf.position.set(.88,1.28,0);wf.rotation.z=.32;group.add(wf);
+  const wr=new THREE.Mesh(new THREE.BoxGeometry(.05,.64,1.78),gm);wr.position.set(-1.0,1.28,0);wr.rotation.z=-.28;group.add(wr);
+  add(new THREE.BoxGeometry(1.0,.04,.95),gm,0,1.65,0);
+  add(new THREE.BoxGeometry(4.1,.12,1.82),dm,0,.08,0);
+  add(new THREE.BoxGeometry(3.7,.18,.06),mat(colors.trim,.3,.7),0,.22,1.02);
+  add(new THREE.BoxGeometry(3.7,.18,.06),mat(colors.trim,.3,.7),0,.22,-1.02);
+  add(new THREE.BoxGeometry(.28,.14,2.0),bm,-2.2,1.56,0);
+  add(new THREE.BoxGeometry(.2,.1,.14),bm,1.6,1.12,1.05);add(new THREE.BoxGeometry(.2,.1,.14),bm,1.6,1.12,-1.05);
+  [[1.4,0,1.02],[-1.4,0,1.02],[1.4,0,-1.02],[-1.4,0,-1.02]].forEach(([x,y,z])=>{
+    const wg=new THREE.Group();
+    const tire=new THREE.Mesh(new THREE.CylinderGeometry(.42,.42,.3,32),dm);tire.rotation.x=Math.PI/2;wg.add(tire);
+    const rim=new THREE.Mesh(new THREE.CylinderGeometry(.27,.27,.32,14),tm);rim.rotation.x=Math.PI/2;wg.add(rim);
+    for(let s=0;s<6;s++){const sp=new THREE.Mesh(new THREE.BoxGeometry(.035,.5,.035),tm);sp.rotation.x=Math.PI/2;sp.rotation.y=(s/6)*Math.PI;wg.add(sp);}
+    const hub=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,.34,8),mat(0xD97706,.95,.05));hub.rotation.x=Math.PI/2;wg.add(hub);
+    wg.position.set(x,.42,z);group.add(wg);
+  });
+  const shadow=new THREE.Mesh(new THREE.PlaneGeometry(5.5,2.8),new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.4,depthWrite:false}));
+  shadow.rotation.x=-Math.PI/2;shadow.position.y=.01;group.add(shadow);
+  return {group,parts};
+}
+
+/* HERO SCENE */
+(function initHero(){
+  const canvas=document.getElementById('heroCanvas');if(!canvas)return;
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.0;renderer.setClearColor(0x000000,0);
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(50,canvas.clientWidth/canvas.clientHeight,.1,100);
+  camera.position.set(5,2.5,6);camera.lookAt(0,.5,0);
+  scene.add(new THREE.AmbientLight(0x1a0a3a,.6));
+  const key=new THREE.DirectionalLight(0xffffff,1.8);key.position.set(6,10,6);key.castShadow=true;scene.add(key);
+  const purPt=new THREE.PointLight(0x7C3AED,8,20);purPt.position.set(3,3,3);scene.add(purPt);
+  const goldPt=new THREE.PointLight(0xD97706,3,15);goldPt.position.set(-4,2,-4);scene.add(goldPt);
+  const rim=new THREE.DirectionalLight(0xA78BFA,.8);rim.position.set(-8,4,-8);scene.add(rim);
+  const floor=new THREE.Mesh(new THREE.PlaneGeometry(40,40),new THREE.MeshStandardMaterial({color:0x050310,metalness:.95,roughness:.05}));
+  floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor);
+  const car=buildCar({body:0x5B21B6,trim:0xD97706});scene.add(car.group);
+  const pCount=250,pGeo=new THREE.BufferGeometry();
+  const pPos=new Float32Array(pCount*3),pVel=new Float32Array(pCount*3);
+  for(let i=0;i<pCount;i++){pPos[i*3]=(Math.random()-.5)*30;pPos[i*3+1]=Math.random()*12-3;pPos[i*3+2]=(Math.random()-.5)*30;pVel[i*3]=(Math.random()-.5)*.025;pVel[i*3+1]=.002+Math.random()*.004;pVel[i*3+2]=(Math.random()-.5)*.025;}
+  pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
+  const pts=new THREE.Points(pGeo,new THREE.PointsMaterial({color:0xA78BFA,size:.07,transparent:true,opacity:.8,sizeAttenuation:true,depthWrite:false}));
+  scene.add(pts);
+  const golPts=new THREE.Points(pGeo.clone(),new THREE.PointsMaterial({color:0xFCD34D,size:.05,transparent:true,opacity:.5,sizeAttenuation:true,depthWrite:false}));
+  scene.add(golPts);
+  function resize(){const w=canvas.clientWidth,h=canvas.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+  window.addEventListener('resize',resize);resize();
+  let t=0;
+  (function anim(){requestAnimationFrame(anim);t+=.01;car.group.rotation.y=t*.07+Math.sin(t*.25)*.1;car.group.position.y=Math.sin(t*.7)*.04;purPt.position.x=Math.cos(t*.5)*7;purPt.position.z=Math.sin(t*.5)*7;goldPt.position.x=Math.cos(t*.3+2)*6;goldPt.position.z=Math.sin(t*.3+2)*6;const pa=pGeo.attributes.position;for(let i=0;i<pCount;i++){pa.setY(i,pa.getY(i)+pVel[i*3+1]);if(pa.getY(i)>9){pa.setX(i,(Math.random()-.5)*28);pa.setY(i,-3);pa.setZ(i,(Math.random()-.5)*28);}}pa.needsUpdate=true;renderer.render(scene,camera);})();
+})();
+
+</script>
+</body>
+</html>
